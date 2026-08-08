@@ -8,8 +8,8 @@ Lab notebooks and the **SupportFlow** sandbox agent for the [Agentic AI Governan
 
 | Lab | Week | Open |
 |---|---|---|
-| **Lab 0 — Hello SupportFlow** | 1 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/cyberprosai/agentic-gov-labs/blob/main/notebooks/00_hello_supportflow.ipynb) |
-| **Lab 2 — Follow the Data** | 2 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/cyberprosai/agentic-gov-labs/blob/main/notebooks/02_presidio_pii_scan.ipynb) |
+| **Lab 0 — Hello SupportFlow** | 1 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/00_hello_supportflow.ipynb) |
+| **Lab 2 — Follow the Data** | 2 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/02_presidio_pii_scan.ipynb) |
 
 **You do not need to know Python.** Click a badge, then **Runtime → Run all**.
 
@@ -54,7 +54,7 @@ You need a free model API key. Get one at **[aistudio.google.com](https://aistud
 ## Run it locally (optional)
 
 ```bash
-git clone https://github.com/cyberprosai/agentic-gov-labs.git
+git clone https://github.com/francoisarthanas/agentic-gov-labs.git
 cd agentic-gov-labs
 pip install -r requirements.txt
 export GOOGLE_API_KEY=your-key-here
