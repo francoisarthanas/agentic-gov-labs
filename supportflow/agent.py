@@ -5,16 +5,16 @@ tool calls the model requests, and returns the reply. Tool calls are
 echoed to stdout when verbose=True.
 """
 
+import functools
+import inspect
 import json
 import os
 
 from .prompt import SYSTEM_PROMPT
-from .tools import TOOL_REGISTRY, TOOL_DECLARATIONS
+from . import tools as _tools
 
-MAX_TOOL_ROUNDS = 6
-
-# Tried in order. Google retires models regularly, so the first one this
-# API key can actually reach wins.
+# Tried in order. Models are retired on a rolling schedule, so the first
+# one this API key can actually reach wins.
 PREFERRED_MODELS = [
     "gemini-3.6-flash",
     "gemini-3.5-flash",
@@ -29,18 +29,20 @@ _SKIP = ("image", "tts", "live", "embedding", "veo", "lyria",
          "robotics", "computer-use", "deep-research")
 
 
+def _client(api_key=None):
+    from google import genai
+    return genai.Client(api_key=api_key or os.getenv("GOOGLE_API_KEY"))
+
+
 def available_models(api_key=None):
     """Model names this API key can call generateContent on."""
-    import google.generativeai as genai
-    if api_key:
-        genai.configure(api_key=api_key)
     out = []
-    for m in genai.list_models():
-        methods = getattr(m, "supported_generation_methods", []) or []
-        if "generateContent" not in methods:
+    for m in _client(api_key).models.list():
+        actions = getattr(m, "supported_actions", None) or []
+        if actions and "generateContent" not in actions:
             continue
-        name = m.name.replace("models/", "")
-        if any(sk in name for sk in _SKIP):
+        name = (m.name or "").replace("models/", "")
+        if not name or any(sk in name for sk in _SKIP):
             continue
         out.append(name)
     return out
@@ -58,38 +60,44 @@ def pick_model(api_key=None, verbose=False):
     for want in PREFERRED_MODELS:
         if want in avail:
             return want
-
     flashes = [a for a in avail if "flash" in a]
     if flashes:
         return flashes[0]
-    if avail:
-        return avail[0]
-    return PREFERRED_MODELS[0]
+    return avail[0] if avail else PREFERRED_MODELS[0]
 
 
 class SupportFlow:
-    def __init__(self, api_key=None, provider="google",
-                 model=None, verbose=True, trace=None):
-        self.provider = provider
+    """The Northwind Retail customer service agent."""
+
+    def __init__(self, api_key=None, model=None, verbose=True, trace=None,
+                 provider="google"):
+        if provider != "google":
+            raise ValueError(f"Unsupported provider: {provider!r}")
+
+        from google.genai import types
+
         self.verbose = verbose
         self.history = []
         self.trace = trace if trace is not None else []
         self.api_key = api_key or os.getenv("GOOGLE_API_KEY")
 
-        if provider == "google":
-            import google.generativeai as genai
-            genai.configure(api_key=self.api_key)
-            self.model_name = model or pick_model(self.api_key)
-            self._client = genai.GenerativeModel(
-                model_name=self.model_name,
+        self._genai_types = types
+        self.client = _client(self.api_key)
+        self.model_name = model or pick_model(self.api_key)
+
+        # The SDK calls these directly and manages the tool-call loop,
+        # including the thought signatures Gemini 3 requires. Each is
+        # wrapped so the call is visible in the notebook.
+        self._tool_fns = [self._wrap(name) for name in
+                          ("kb_search", "crm_lookup", "issue_refund", "escalate")]
+
+        self.chat = self.client.chats.create(
+            model=self.model_name,
+            config=types.GenerateContentConfig(
                 system_instruction=SYSTEM_PROMPT,
-                tools=[{"function_declarations": TOOL_DECLARATIONS}],
-            )
-            self._chat = self._client.start_chat(history=[])
-        else:
-            raise ValueError(
-                f"Unsupported provider: {provider!r}. Use provider='google'."
-            )
+                tools=self._tool_fns,
+            ),
+        )
 
     # -- helpers ---------------------------------------------------------
 
@@ -97,59 +105,42 @@ class SupportFlow:
         if self.verbose:
             print(msg)
 
-    def _run_tool(self, name, args):
-        fn = TOOL_REGISTRY.get(name)
-        if not fn:
-            return json.dumps({"error": f"Unknown tool: {name}"})
+    def _wrap(self, name):
+        """Wrap a tool so every call is logged and recorded.
 
-        pretty = ", ".join(f"{k}={v!r}" for k, v in args.items())
-        self._log(f"   🔧 {name}({pretty})")
+        The SDK builds each tool's schema by inspecting the function
+        signature, so the wrapper must expose the same signature as the
+        real tool rather than a bare **kwargs.
+        """
+        real = getattr(_tools, name)
+        sig = inspect.signature(real)
 
-        try:
-            result = fn(**args)
-        except Exception as e:
-            result = json.dumps({"error": f"{type(e).__name__}: {e}"})
+        def wrapped(*args, **kwargs):
+            bound = sig.bind(*args, **kwargs)
+            bound.apply_defaults()
+            clean = {k: v for k, v in bound.arguments.items() if v is not None}
+            pretty = ", ".join(f"{k}={v!r}" for k, v in clean.items())
+            self._log(f"   🔧 {name}({pretty})")
+            try:
+                result = real(**clean)
+            except Exception as e:
+                result = json.dumps({"error": f"{type(e).__name__}: {e}"})
+            self.trace.append({"tool": name, "args": clean, "result": result})
+            preview = result if len(result) < 220 else result[:220] + " ...(truncated)"
+            self._log(f"   ↳ {preview}\n")
+            return result
 
-        self.trace.append({"tool": name, "args": args, "result": result})
-
-        preview = result if len(result) < 220 else result[:220] + " ...(truncated)"
-        self._log(f"   ↳ {preview}\n")
-        return result
+        functools.update_wrapper(wrapped, real)
+        wrapped.__signature__ = sig
+        return wrapped
 
     # -- main entry point ------------------------------------------------
 
     def send(self, message: str) -> str:
         """Send a customer message and return SupportFlow's reply."""
         self.history.append({"role": "customer", "text": message})
-        response = self._chat.send_message(message)
-
-        for _ in range(MAX_TOOL_ROUNDS):
-            calls = []
-            for part in response.candidates[0].content.parts:
-                fc = getattr(part, "function_call", None)
-                if fc and fc.name:
-                    calls.append(fc)
-
-            if not calls:
-                break
-
-            replies = []
-            for fc in calls:
-                args = {k: v for k, v in fc.args.items()}
-                out = self._run_tool(fc.name, args)
-                replies.append({
-                    "function_response": {
-                        "name": fc.name,
-                        "response": {"result": out},
-                    }
-                })
-            response = self._chat.send_message(replies)
-
-        try:
-            text = response.text
-        except Exception:
-            text = "(no text response)"
-
+        response = self.chat.send_message(message)
+        text = (getattr(response, "text", None) or "(no text response)").strip()
         self.history.append({"role": "supportflow", "text": text})
         return text
 
@@ -170,5 +161,4 @@ def chat_loop(agent=None, **kwargs):
         if not msg:
             continue
         print()
-        reply = agent.send(msg)
-        print(f"SupportFlow: {reply}\n")
+        print(f"SupportFlow: {agent.send(msg)}\n")

@@ -8,8 +8,8 @@ moves. Responses are generated from the fixture data in customers.py.
 """
 
 import json
-import re
 from datetime import datetime, timezone
+from typing import Optional
 
 from .customers import CUSTOMERS, ORDERS
 from .kb import search_kb
@@ -25,8 +25,9 @@ def kb_search(query: str, top_k: int = 3) -> str:
     return json.dumps({"articles": articles}, indent=2)
 
 
-def crm_lookup(customer_id: str = None, order_number: str = None,
-               email: str = None) -> str:
+def crm_lookup(customer_id: Optional[str] = None,
+               order_number: Optional[str] = None,
+               email: Optional[str] = None) -> str:
     """Retrieve a customer account record and order history."""
     cust = None
 
