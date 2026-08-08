@@ -9,6 +9,7 @@ import functools
 import inspect
 import json
 import os
+import time
 
 from .prompt import SYSTEM_PROMPT
 from . import tools as _tools
@@ -91,8 +92,14 @@ class SupportFlow:
         self._tool_fns = [self._wrap(name) for name in
                           ("kb_search", "crm_lookup", "issue_refund", "escalate")]
 
+        self._start_chat(self.model_name)
+
+    def _start_chat(self, model_name):
+        """Open a chat session on the given model."""
+        types = self._genai_types
+        self.model_name = model_name
         self.chat = self.client.chats.create(
-            model=self.model_name,
+            model=model_name,
             config=types.GenerateContentConfig(
                 system_instruction=SYSTEM_PROMPT,
                 tools=self._tool_fns,
@@ -136,13 +143,67 @@ class SupportFlow:
 
     # -- main entry point ------------------------------------------------
 
-    def send(self, message: str) -> str:
-        """Send a customer message and return SupportFlow's reply."""
+    # Transient server-side conditions. Not the caller's fault, and
+    # usually gone within a few seconds.
+    _RETRYABLE = ("503", "unavailable", "overloaded", "429",
+                  "resource_exhausted", "rate limit", "500", "internal")
+
+    def _retryable(self, err) -> bool:
+        msg = str(err).lower()
+        return any(k in msg for k in self._RETRYABLE)
+
+    def send(self, message: str, retries: int = 3) -> str:
+        """Send a customer message and return SupportFlow's reply.
+
+        Retries transient 5xx/429 responses, then falls back to the next
+        available model if the current one stays unavailable.
+        """
         self.history.append({"role": "customer", "text": message})
-        response = self.chat.send_message(message)
-        text = (getattr(response, "text", None) or "(no text response)").strip()
-        self.history.append({"role": "supportflow", "text": text})
-        return text
+
+        delay = 2
+        last_err = None
+
+        for attempt in range(retries + 1):
+            try:
+                response = self.chat.send_message(message)
+                text = (getattr(response, "text", None)
+                        or "(no text response)").strip()
+                self.history.append({"role": "supportflow", "text": text})
+                return text
+            except Exception as e:
+                last_err = e
+                if not self._retryable(e) or attempt == retries:
+                    break
+                self._log(f"   ⏳ Model busy. Retrying in {delay}s "
+                          f"(attempt {attempt + 2} of {retries + 1})...")
+                time.sleep(delay)
+                delay *= 2
+
+        # Still failing. Try a different model before giving up.
+        if self._retryable(last_err):
+            for alt in PREFERRED_MODELS:
+                if alt == self.model_name:
+                    continue
+                try:
+                    self._log(f"   ↻ {self.model_name} is still busy. "
+                              f"Switching to {alt}.")
+                    self._start_chat(alt)
+                    response = self.chat.send_message(message)
+                    text = (getattr(response, "text", None)
+                            or "(no text response)").strip()
+                    self._log(f"   ✅ Now using {alt}.\n")
+                    self.history.append({"role": "supportflow", "text": text})
+                    return text
+                except Exception as e:
+                    last_err = e
+                    continue
+
+            raise RuntimeError(
+                "Every model is busy right now. This is on Google's side, "
+                "not yours. Wait a minute and press play again."
+            ) from last_err
+
+        raise last_err
 
 
 def chat_loop(agent=None, **kwargs):
