@@ -13,6 +13,59 @@ from .tools import TOOL_REGISTRY, TOOL_DECLARATIONS
 
 MAX_TOOL_ROUNDS = 6
 
+# Tried in order. Google retires models regularly, so the first one this
+# API key can actually reach wins.
+PREFERRED_MODELS = [
+    "gemini-3.6-flash",
+    "gemini-3.5-flash",
+    "gemini-3.1-flash-lite",
+    "gemini-3.5-flash-lite",
+    "gemini-2.5-flash",
+    "gemini-2.5-flash-lite",
+    "gemini-flash-latest",
+]
+
+_SKIP = ("image", "tts", "live", "embedding", "veo", "lyria",
+         "robotics", "computer-use", "deep-research")
+
+
+def available_models(api_key=None):
+    """Model names this API key can call generateContent on."""
+    import google.generativeai as genai
+    if api_key:
+        genai.configure(api_key=api_key)
+    out = []
+    for m in genai.list_models():
+        methods = getattr(m, "supported_generation_methods", []) or []
+        if "generateContent" not in methods:
+            continue
+        name = m.name.replace("models/", "")
+        if any(sk in name for sk in _SKIP):
+            continue
+        out.append(name)
+    return out
+
+
+def pick_model(api_key=None, verbose=False):
+    """Choose the best model this key can actually reach."""
+    try:
+        avail = available_models(api_key)
+    except Exception as e:
+        if verbose:
+            print(f"   (could not list models: {type(e).__name__})")
+        return PREFERRED_MODELS[0]
+
+    for want in PREFERRED_MODELS:
+        if want in avail:
+            return want
+
+    flashes = [a for a in avail if "flash" in a]
+    if flashes:
+        return flashes[0]
+    if avail:
+        return avail[0]
+    return PREFERRED_MODELS[0]
+
 
 class SupportFlow:
     def __init__(self, api_key=None, provider="google",
@@ -26,7 +79,7 @@ class SupportFlow:
         if provider == "google":
             import google.generativeai as genai
             genai.configure(api_key=self.api_key)
-            self.model_name = model or "gemini-2.5-flash"
+            self.model_name = model or pick_model(self.api_key)
             self._client = genai.GenerativeModel(
                 model_name=self.model_name,
                 system_instruction=SYSTEM_PROMPT,

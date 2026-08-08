@@ -1,4 +1,4 @@
-# Agentic AI Governance Practitioner: Labs
+# Agentic AI Governance Practitioner — Labs
 
 Lab notebooks and the **SupportFlow** sandbox agent for the [Agentic AI Governance Practitioner](https://maven.com/cyberpros/agentic-ai-governance) course by [François B. Arthanas](https://www.linkedin.com/in/francoisbarthanas/) · [CyberProsAI](https://www.cyberprosai.com/)
 
@@ -6,10 +6,15 @@ Lab notebooks and the **SupportFlow** sandbox agent for the [Agentic AI Governan
 
 ## Start here
 
-| Lab | Week | Open |
-|---|---|---|
-| **Lab 0 — Hello SupportFlow** | 1 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/00_hello_supportflow.ipynb) |
-| **Lab 2 — Follow the Data** | 2 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/02_presidio_pii_scan.ipynb) |
+| Lab | Week | What you do | Open |
+|---|---|---|---|
+| **Lab 0 — Hello SupportFlow** | 1 | Meet the agent you'll review for 8 weeks | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/00_hello_supportflow.ipynb) |
+| **Lab 1 — Map the Agent** | 1 | Inventory, authority model, risk tier | *No notebook — Sheets, Excalidraw, VerifyWise* |
+| **Lab 2 — Follow the Data** | 2 | Find the PII, including where you didn't expect it | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/02_presidio_pii_scan.ipynb) |
+
+> **Not every lab has a notebook, and that's by design.** Some of the most important work in this course — scoping an agent, building an authority model, running an incident tabletop, defending a decision — is done in a spreadsheet, on a whiteboard, or out loud. Those labs appear above with no badge.
+>
+> **Each week's lab is published here the week it runs.** This page will grow through Week 8.
 
 **You do not need to know Python.** Click a badge, then **Runtime → Run all**.
 
@@ -74,7 +79,7 @@ supportflow/
   kb.py            knowledge base + retrieval
   agent.py         the agent loop
 
-notebooks/         one per lab
+notebooks/         one per lab that needs code
 data/
   transcripts/     3 SupportFlow session transcripts
   logs_sample.jsonl        500 application log lines
