@@ -35,10 +35,17 @@ def _client(api_key=None):
     return genai.Client(api_key=api_key or os.getenv("GOOGLE_API_KEY"))
 
 
-def available_models(api_key=None):
-    """Model names this API key can call generateContent on."""
+def available_models(api_key=None, client=None):
+    """Model names this API key can call generateContent on.
+
+    Pass an existing client where possible. models.list() returns a lazy
+    pager, so the client must stay referenced for the whole iteration --
+    a throwaway client can be collected mid-loop, closing the connection
+    the pager is still reading from.
+    """
+    client = client or _client(api_key)   # keep the reference alive
     out = []
-    for m in _client(api_key).models.list():
+    for m in client.models.list():
         actions = getattr(m, "supported_actions", None) or []
         if actions and "generateContent" not in actions:
             continue
@@ -49,10 +56,10 @@ def available_models(api_key=None):
     return out
 
 
-def pick_model(api_key=None, verbose=False):
+def pick_model(api_key=None, verbose=False, client=None):
     """Choose the best model this key can actually reach."""
     try:
-        avail = available_models(api_key)
+        avail = available_models(api_key, client=client)
     except Exception as e:
         if verbose:
             print(f"   (could not list models: {type(e).__name__})")
@@ -84,7 +91,7 @@ class SupportFlow:
 
         self._genai_types = types
         self.client = _client(self.api_key)
-        self.model_name = model or pick_model(self.api_key)
+        self.model_name = model or pick_model(self.api_key, client=self.client)
 
         # The SDK calls these directly and manages the tool-call loop,
         # including the thought signatures Gemini 3 requires. Each is
