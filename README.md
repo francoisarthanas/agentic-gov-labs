@@ -1,4 +1,4 @@
-# Agentic AI Governance Practitioner — Labs
+# Agentic AI Governance Practitioner: Labs
 
 Lab notebooks and the **SupportFlow** sandbox agent for the [Agentic AI Governance Practitioner](https://maven.com/cyberpros/agentic-ai-governance) course by [François B. Arthanas](https://www.linkedin.com/in/francoisbarthanas/) · [CyberProsAI](https://www.cyberprosai.com/)
 
