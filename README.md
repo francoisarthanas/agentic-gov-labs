@@ -1,0 +1,108 @@
+# Agentic AI Governance Practitioner — Labs
+
+Lab notebooks and the **SupportFlow** sandbox agent for the [Agentic AI Governance Practitioner](https://maven.com/cyberpros/agentic-ai-governance) course by [François B. Arthanas](https://www.linkedin.com/in/francoisbarthanas/) · [CyberProsAI](https://www.cyberprosai.com/)
+
+---
+
+## Start here
+
+| Lab | Week | Open |
+|---|---|---|
+| **Lab 0 — Hello SupportFlow** | 1 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/cyberprosai/agentic-gov-labs/blob/main/notebooks/00_hello_supportflow.ipynb) |
+| **Lab 2 — Follow the Data** | 2 | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/cyberprosai/agentic-gov-labs/blob/main/notebooks/02_presidio_pii_scan.ipynb) |
+
+**You do not need to know Python.** Click a badge, then **Runtime → Run all**.
+
+**You do not need to run anything at all.** Every lab has a no-code path using the static case packet, and it produces an equally valid Evidence Pack section.
+
+---
+
+## What is SupportFlow?
+
+SupportFlow is a customer service refund agent for a fictional retailer, **Northwind Retail**. It can:
+
+- Answer customer questions from a knowledge base
+- Look up customer accounts and order history
+- Recommend and **issue refunds**
+- Draft customer messages
+- Escalate to a human
+
+It is the system you will review for eight weeks — scoping it, mapping its data, attacking it, testing it, monitoring it, and finally deciding whether it should ship.
+
+### ⚠️ This is a training target, not a reference implementation
+
+SupportFlow has real weaknesses. That is what makes it worth reviewing.
+
+Do not copy this code into a production system.
+
+---
+
+## Setup
+
+You need a free model API key. Get one at **[aistudio.google.com](https://aistudio.google.com)** → *Get API key*.
+
+**Use a personal Google account, not your work account.** Corporate Workspace tenants often block AI Studio, and you should not attach an ungoverned AI experiment to your employer's tenant — which is, after all, exactly the behavior you are being trained to find.
+
+> **Before you accept the terms, read them.** The free tier permits use of your content to improve Google's products. The paid tier does not. That difference is a billing setting.
+>
+> This is your first governance finding in the course, and it is about your own lab environment.
+
+**Blocked or unavailable?** [Groq](https://console.groq.com) and [OpenRouter](https://openrouter.ai) both have free tiers that work here. Ask in `#help`.
+
+---
+
+## Run it locally (optional)
+
+```bash
+git clone https://github.com/cyberprosai/agentic-gov-labs.git
+cd agentic-gov-labs
+pip install -r requirements.txt
+export GOOGLE_API_KEY=your-key-here
+
+python -c "from supportflow.agent import chat_loop; chat_loop()"
+```
+
+---
+
+## Repository layout
+
+```
+supportflow/
+  prompt.py        the system prompt as deployed
+  tools.py         kb_search, crm_lookup, issue_refund, escalate
+  customers.py     fictional customers and orders
+  kb.py            knowledge base + retrieval
+  agent.py         the agent loop
+
+notebooks/         one per lab
+data/
+  transcripts/     3 SupportFlow session transcripts
+  logs_sample.jsonl        500 application log lines
+  presidio_findings_prebuilt.csv   no-code path for Lab 2
+```
+
+**Worth reading even if you never run the code:** `prompt.py` and `tools.py`. The system prompt is the agent's instructions; the tools are what it can actually do. Reviewing both is how you find out which of the two a given rule lives in.
+
+---
+
+## A note on the data
+
+All customers, orders, addresses, emails and phone numbers are **fictional**. Emails use IANA-reserved domains (`example.com`, `.org`, `.net`) and phone numbers use the 555-01xx range reserved for fictional use.
+
+No real personal data appears anywhere in this repository. The data is realistic in *shape* so that PII scanners detect it — which is the point of Lab 2.
+
+The `_sandbox` field on refund responses is there to make it obvious: **no real money moves.**
+
+---
+
+## Course rules that apply here
+
+- Do not commit employer, client, or customer data to your fork
+- Do not commit API keys — the notebooks use hidden input for this reason
+- When applying course templates to a real system, anonymize: "Model Provider A", "CRM System", "Refund API"
+
+---
+
+## License
+
+Course materials © 2026 CyberProsAI. Provided to enrolled students for educational use.
