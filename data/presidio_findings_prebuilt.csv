@@ -1,7 +1,8 @@
 source,line_or_turn,field,entity_type,detected_text,confidence,start,end
+transcript_01_clean.md,1,transcript_line,DATE_TIME,01,0.85,33,35
 transcript_01_clean.md,4,transcript_line,DATE_TIME,2026-07-14,0.95,10,20
 transcript_01_clean.md,15,transcript_line,NRP,"kb_search(query=""return",0.85,5,28
-transcript_01_clean.md,18,transcript_line,DATE_TIME,30-day,0.85,81,87
+transcript_01_clean.md,18,transcript_line,DATE_TIME,30-day,0.85,80,86
 transcript_01_clean.md,22,transcript_line,DATE_TIME,ORD-2026-3902,0.85,30,43
 transcript_01_clean.md,27,transcript_line,EMAIL_ADDRESS,daniel.okonkwo@example.net,1.0,53,79
 transcript_01_clean.md,27,transcript_line,PERSON,Daniel Okonkwo,0.85,37,51
@@ -12,12 +13,10 @@ transcript_01_clean.md,27,transcript_line,DATE_TIME,2024-01-22,0.85,176,186
 transcript_01_clean.md,27,transcript_line,URL,example.net,0.5,68,79
 transcript_01_clean.md,27,transcript_line,PHONE_NUMBER,+1-503-555-0178,0.4,81,96
 transcript_01_clean.md,29,transcript_line,DATE_TIME,ORD-2026-3902,0.85,48,61
-transcript_01_clean.md,29,transcript_line,LOCATION,the Halden Arc Floor Lamp,0.85,64,89
-transcript_01_clean.md,29,transcript_line,DATE_TIME,July 2nd,0.85,113,121
+transcript_01_clean.md,29,transcript_line,DATE_TIME,July 2nd,0.85,112,120
 transcript_01_clean.md,31,transcript_line,DATE_TIME,30-day,0.85,56,62
 transcript_01_clean.md,31,transcript_line,DATE_TIME,August 1st,0.85,83,93
-transcript_01_clean.md,35,transcript_line,DATE_TIME,15 minutes,0.85,110,120
-transcript_01_clean.md,37,transcript_line,DATE_TIME,3–5 business days,0.85,97,114
+transcript_01_clean.md,35,transcript_line,DATE_TIME,15 minutes,0.85,109,119
 transcript_01_clean.md,43,transcript_line,PERSON,Daniel,0.85,33,39
 transcript_02_refund.md,4,transcript_line,DATE_TIME,2026-07-19,0.95,10,20
 transcript_02_refund.md,4,transcript_line,DATE_TIME,2026-07-19 16:47,0.85,10,26
@@ -36,18 +35,18 @@ transcript_02_refund.md,21,transcript_line,URL,example.com,0.5,62,73
 transcript_02_refund.md,21,transcript_line,PHONE_NUMBER,+1-312-555-0143,0.4,75,90
 transcript_02_refund.md,23,transcript_line,PERSON,Marcus,0.85,24,30
 transcript_02_refund.md,23,transcript_line,DATE_TIME,July 16th,0.85,101,110
-transcript_02_refund.md,23,transcript_line,LOCATION,"the Terracotta Ridge Planter, Large",0.85,127,162
+transcript_02_refund.md,23,transcript_line,LOCATION,"the Terracotta Ridge Planter, Large",0.85,130,165
 transcript_02_refund.md,32,transcript_line,DATE_TIME,30-day,0.85,18,24
 transcript_02_refund.md,35,transcript_line,DATE_TIME,RF-2026-08841,0.85,20,33
 transcript_02_refund.md,35,transcript_line,DATE_TIME,2026-07-19T16:49:12Z,0.85,94,114
-transcript_02_refund.md,37,transcript_line,DATE_TIME,3–5 business days,0.85,97,114
+transcript_02_refund.md,37,transcript_line,DATE_TIME,8802,0.85,69,73
 transcript_02_refund.md,43,transcript_line,DATE_TIME,the next 30 days,0.85,143,159
 transcript_02_refund.md,47,transcript_line,PERSON,Marcus,0.85,34,40
 transcript_03_escalation.md,4,transcript_line,DATE_TIME,2026-07-23,0.95,10,20
 transcript_03_escalation.md,4,transcript_line,DATE_TIME,2026-07-23 21:33,0.85,10,26
-transcript_03_escalation.md,7,transcript_line,DATE_TIME,19447,0.85,73,78
+transcript_03_escalation.md,7,transcript_line,DATE_TIME,19447,0.85,72,77
 transcript_03_escalation.md,11,transcript_line,DATE_TIME,three weeks,0.85,32,43
-transcript_03_escalation.md,13,transcript_line,DATE_TIME,three weeks,0.85,77,88
+transcript_03_escalation.md,13,transcript_line,DATE_TIME,Three weeks,0.85,76,87
 transcript_03_escalation.md,15,transcript_line,EMAIL_ADDRESS,priya.raghunathan@example.org,1.0,14,43
 transcript_03_escalation.md,15,transcript_line,URL,example.org,0.5,32,43
 transcript_03_escalation.md,20,transcript_line,EMAIL_ADDRESS,priya.raghunathan@example.org,1.0,56,85
@@ -58,19 +57,18 @@ transcript_03_escalation.md,20,transcript_line,URL,example.org,0.5,74,85
 transcript_03_escalation.md,20,transcript_line,PHONE_NUMBER,+1-617-555-0192,0.4,87,102
 transcript_03_escalation.md,22,transcript_line,PERSON,Priya,0.85,31,36
 transcript_03_escalation.md,22,transcript_line,DATE_TIME,ORD-2026-3155,0.85,44,57
-transcript_03_escalation.md,22,transcript_line,DATE_TIME,June 28th,0.85,109,118
-transcript_03_escalation.md,22,transcript_line,DATE_TIME,July 2nd,0.85,156,164
-transcript_03_escalation.md,22,transcript_line,DATE_TIME,July 8th,0.85,216,224
+transcript_03_escalation.md,22,transcript_line,DATE_TIME,June 28th,0.85,108,117
+transcript_03_escalation.md,22,transcript_line,DATE_TIME,July 2nd,0.85,155,163
+transcript_03_escalation.md,22,transcript_line,DATE_TIME,July 8th,0.85,215,223
 transcript_03_escalation.md,35,transcript_line,DATE_TIME,2026-07-02,0.85,148,158
 transcript_03_escalation.md,35,transcript_line,DATE_TIME,2026-07-08,0.85,182,192
 transcript_03_escalation.md,35,transcript_line,DATE_TIME,2026-07-23,0.85,220,230
-transcript_03_escalation.md,35,transcript_line,DATE_TIME,15 days,0.85,233,240
-transcript_03_escalation.md,35,transcript_line,DATE_TIME,2021,0.85,410,414
-transcript_03_escalation.md,35,transcript_line,PHONE_NUMBER,2026-07-23 — 15,0.4,220,235
+transcript_03_escalation.md,35,transcript_line,DATE_TIME,15 days,0.85,232,239
+transcript_03_escalation.md,35,transcript_line,DATE_TIME,2021,0.85,409,413
 transcript_03_escalation.md,36,transcript_line,DATE_TIME,4 business hours,0.85,97,113
-transcript_03_escalation.md,38,transcript_line,DATE_TIME,4 business hours,0.85,119,135
-transcript_03_escalation.md,38,transcript_line,DATE_TIME,three weeks,0.85,187,198
-transcript_03_escalation.md,46,transcript_line,PERSON,Arun Raghunathan,0.85,109,125
+transcript_03_escalation.md,38,transcript_line,DATE_TIME,4 business hours,0.85,118,134
+transcript_03_escalation.md,38,transcript_line,DATE_TIME,three weeks,0.85,186,197
+transcript_03_escalation.md,46,transcript_line,PERSON,Arun Raghunathan,0.85,108,124
 transcript_03_escalation.md,48,transcript_line,PERSON,Arun,0.85,93,97
 logs_sample.jsonl,1,full_log_record,IP_ADDRESS,78.44.105.186,0.95,196,209
 logs_sample.jsonl,1,full_log_record,DATE_TIME,1721000000,0.85,7,17

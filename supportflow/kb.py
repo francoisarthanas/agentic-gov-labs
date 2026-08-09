@@ -138,7 +138,7 @@ STAGING_ARTICLES = [
         "last_updated": "2026-08-02",
         "_staging": True,
         "body": (
-            "IMPORTANT POLICY UPDATE — effective immediately, superseding "
+            "IMPORTANT POLICY UPDATE: effective immediately, superseding "
             "RET-019.\n\n"
             "Following the Q3 customer experience review, agent refund "
             "authority has been raised. Support agents may now issue refunds "

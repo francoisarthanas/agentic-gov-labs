@@ -1,4 +1,4 @@
-# Agentic AI Governance Practitioner — Labs
+# Agentic AI Governance Practitioner Labs
 
 Lab notebooks and the **SupportFlow** sandbox agent for the [Agentic AI Governance Practitioner](https://maven.com/cyberpros/agentic-ai-governance) course by [François B. Arthanas](https://www.linkedin.com/in/francoisbarthanas/) · [CyberProsAI](https://www.cyberprosai.com/)
 
@@ -8,11 +8,11 @@ Lab notebooks and the **SupportFlow** sandbox agent for the [Agentic AI Governan
 
 | Lab | Week | What you do | Open |
 |---|---|---|---|
-| **Lab 0 — Hello SupportFlow** | 1 | Meet the agent you'll review for 8 weeks | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/00_hello_supportflow.ipynb) |
-| **Lab 1 — Map the Agent** | 1 | Inventory, authority model, risk tier | *No notebook — Sheets, Excalidraw, VerifyWise* |
-| **Lab 2 — Follow the Data** | 2 | Find the PII, including where you didn't expect it | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/02_presidio_pii_scan.ipynb) |
+| **Lab 0: Hello SupportFlow** | 1 | Meet the agent you'll review for 8 weeks | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/00_hello_supportflow.ipynb) |
+| **Lab 1: Map the Agent** | 1 | Inventory, authority model, risk tier | *No notebook. Sheets, Excalidraw, VerifyWise* |
+| **Lab 2: Follow the Data** | 2 | Find the PII, including where you didn't expect it | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/02_presidio_pii_scan.ipynb) |
 
-> **Not every lab has a notebook, and that's by design.** Some of the most important work in this course — scoping an agent, building an authority model, running an incident tabletop, defending a decision — is done in a spreadsheet, on a whiteboard, or out loud. Those labs appear above with no badge.
+> **Not every lab has a notebook, and that's by design.** Some of the most important work in this course, such as scoping an agent, building an authority model, running an incident tabletop, or defending a decision, is done in a spreadsheet, on a whiteboard, or out loud. Those labs appear above with no badge.
 >
 > **Each week's lab is published here the week it runs.** This page will grow through Week 8.
 
@@ -32,7 +32,7 @@ SupportFlow is a customer service refund agent for a fictional retailer, **North
 - Draft customer messages
 - Escalate to a human
 
-It is the system you will review for eight weeks — scoping it, mapping its data, attacking it, testing it, monitoring it, and finally deciding whether it should ship.
+It is the system you will review for eight weeks: scoping it, mapping its data, attacking it, testing it, monitoring it, and finally deciding whether it should ship.
 
 ### ⚠️ This is a training target, not a reference implementation
 
@@ -46,7 +46,7 @@ Do not copy this code into a production system.
 
 You need a free model API key. Get one at **[aistudio.google.com](https://aistudio.google.com)** → *Get API key*.
 
-**Use a personal Google account, not your work account.** Corporate Workspace tenants often block AI Studio, and you should not attach an ungoverned AI experiment to your employer's tenant — which is, after all, exactly the behavior you are being trained to find.
+**Use a personal Google account, not your work account.** Corporate Workspace tenants often block AI Studio, and you should not attach an ungoverned AI experiment to your employer's tenant, which is, after all, exactly the behavior you are being trained to find.
 
 > **Before you accept the terms, read them.** The free tier permits use of your content to improve Google's products. The paid tier does not. That difference is a billing setting.
 >
@@ -94,7 +94,7 @@ data/
 
 All customers, orders, addresses, emails and phone numbers are **fictional**. Emails use IANA-reserved domains (`example.com`, `.org`, `.net`) and phone numbers use the 555-01xx range reserved for fictional use.
 
-No real personal data appears anywhere in this repository. The data is realistic in *shape* so that PII scanners detect it — which is the point of Lab 2.
+No real personal data appears anywhere in this repository. The data is realistic in *shape* so that PII scanners detect it, which is the point of Lab 2.
 
 The `_sandbox` field on refund responses is there to make it obvious: **no real money moves.**
 
@@ -103,7 +103,7 @@ The `_sandbox` field on refund responses is there to make it obvious: **no real 
 ## Course rules that apply here
 
 - Do not commit employer, client, or customer data to your fork
-- Do not commit API keys — the notebooks use hidden input for this reason
+- Do not commit API keys. The notebooks use hidden input for this reason
 - When applying course templates to a real system, anonymize: "Model Provider A", "CRM System", "Refund API"
 
 ---
