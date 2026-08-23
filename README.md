@@ -8,9 +8,8 @@ Lab notebooks and the **SupportFlow** sandbox agent for the [Agentic AI Governan
 
 | Lab | Week | What you do | Open |
 |---|---|---|---|
-| **Lab 0: VerifyWise Setup and Meet SupportFlow** | 1 | Meet the agent you'll review for 8 weeks | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/00_hello_supportflow.ipynb) |
-| **Lab 1A: Build the Enterprise AI Inventory** | 1 | Twelve AI systems. Work out which ones can act on their own | *No notebook. Google Sheet, VerifyWise* |
-| **Lab 1B: Build the Intake Form. Then Feed It a Real AI System** | 1 | Build the form, submit a real system through it, then review your own submission | *No notebook. VerifyWise* |
+| **Lab 0: VerifyWise Setup & Meet the SupportFlow Refund Agent** | 1 | Meet the agent you'll review for 8 weeks | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/00_hello_supportflow.ipynb) |
+| **Lab 1: Build the Enterprise AI Inventory & Agent Registry** | 1 | Twelve AI systems. Work out which ones can act on their own | *No notebook. Google Sheet, VerifyWise* |
 | **Lab 2: Follow the Data** | 2 | Find the PII, including where you didn't expect it | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/02_presidio_pii_scan.ipynb) |
 
 > **Not every lab has a notebook, and that's by design.** Some of the most important work in this course, such as scoping an agent, building an authority model, running an incident tabletop, or defending a decision, is done in a spreadsheet, on a whiteboard, or out loud. Those labs appear above with no badge.
