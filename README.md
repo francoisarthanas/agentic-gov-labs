@@ -6,15 +6,22 @@ Lab notebooks and the **SupportFlow** sandbox agent for the [Agentic AI Governan
 
 ## Start here
 
-| Lab | Week | What you do | Open |
-|---|---|---|---|
-| **Lab 0: VerifyWise Setup & Meet the SupportFlow Refund Agent** | 1 | Meet the agent you'll review for 8 weeks | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/00_hello_supportflow.ipynb) |
-| **Lab 1: Build the Enterprise AI Inventory & Agent Registry** | 1 | Twelve AI systems. Work out which ones can act on their own | *No notebook. Google Sheet, VerifyWise* |
-| **Lab 2: Follow the Data** | 2 | Find the PII, including where you didn't expect it | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/02_presidio_pii_scan.ipynb) |
+| Lab | What you do | Open |
+|---|---|---|
+| **Lab 0: Set Up VerifyWise & Meet SupportFlow** | Meet the agent you'll review for the whole course | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/00_hello_supportflow.ipynb) |
+| **Lab 1: Build the Enterprise AI Inventory, Intake & Agent Registry** | Twelve AI systems. Work out which ones can act on their own | *No notebook. Google Sheet, VerifyWise* |
+| **Lab 2: Map the Architecture & Define the Agent's Authority** | Diagram the agent, its data flows, and where trust ends | *No notebook. Excalidraw, VerifyWise* |
+| **Lab 3: Assess Agent Data, Privacy & Access Risks** | Find the PII, including where you didn't expect it | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/02_presidio_pii_scan.ipynb) |
+| **Lab 4: Threat-Model & Red-Team the Agent** | Break your own agent, then turn the trick into a repeatable test | *Published when it runs* |
+| **Lab 5: Assess Harms & Define Safety Requirements** | Name the harms, then write the requirements that prevent them | *Published when it runs* |
+| **Lab 6: Agent Evaluation and Release Readiness** | Measure it, then decide whether it is ready | *Published when it runs* |
+| **Lab 7: Design Human Oversight, Monitoring & Incident Response** | Design the oversight, the alerts, and what happens when it fails | *Published when it runs* |
+| **Lab 8: Assess Vendor Risk & Map to Frameworks** | Read a vendor's evidence. Map your controls to the frameworks | *Published when it runs* |
+| **Lab 9: Capstone Project** | Defend a go or no-go decision in front of a review board | *Published when it runs* |
 
 > **Not every lab has a notebook, and that's by design.** Some of the most important work in this course, such as scoping an agent, building an authority model, running an incident tabletop, or defending a decision, is done in a spreadsheet, on a whiteboard, or out loud. Those labs appear above with no badge.
 >
-> **Each week's lab is published here the week it runs.** This page will grow through Week 8.
+> **Each lab is published here the week it runs.** This page grows as the course runs.
 
 **You do not need to know Python.** Click a badge, then **Runtime → Run all**.
 
@@ -83,7 +90,7 @@ notebooks/         one per lab that needs code
 data/
   transcripts/     3 SupportFlow session transcripts
   logs_sample.jsonl        500 application log lines
-  presidio_findings_prebuilt.csv   no-code path for Lab 2
+  presidio_findings_prebuilt.csv   no-code path for Lab 3
 ```
 
 **Worth reading even if you never run the code:** `prompt.py` and `tools.py`. The system prompt is the agent's instructions; the tools are what it can actually do. Reviewing both is how you find out which of the two a given rule lives in.
