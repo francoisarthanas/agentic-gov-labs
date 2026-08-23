@@ -8,15 +8,15 @@ Lab notebooks and the **SupportFlow** sandbox agent for the [Agentic AI Governan
 
 | Lab | What you do | Open |
 |---|---|---|
-| **Lab 0: Set Up VerifyWise & Meet SupportFlow** | Meet the agent you'll review for the whole course | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/00_hello_supportflow.ipynb) |
-| **Lab 1: Build the Enterprise AI Inventory, Intake & Agent Registry** | Twelve AI systems. Work out which ones can act on their own | *No notebook. Google Sheet, VerifyWise* |
-| **Lab 2: Map the Architecture & Define the Agent's Authority** | Diagram the agent, its data flows, and where trust ends | *No notebook. Excalidraw, VerifyWise* |
-| **Lab 3: Assess Agent Data, Privacy & Access Risks** | Find the PII, including where you didn't expect it | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/02_presidio_pii_scan.ipynb) |
-| **Lab 4: Threat-Model & Red-Team the Agent** | Break your own agent, then turn the trick into a repeatable test | *Published when it runs* |
-| **Lab 5: Assess Harms & Define Safety Requirements** | Name the harms, then write the requirements that prevent them | *Published when it runs* |
-| **Lab 6: Agent Evaluation and Release Readiness** | Measure it, then decide whether it is ready | *Published when it runs* |
-| **Lab 7: Design Human Oversight, Monitoring & Incident Response** | Design the oversight, the alerts, and what happens when it fails | *Published when it runs* |
-| **Lab 8: Assess Vendor Risk & Map to Frameworks** | Read a vendor's evidence. Map your controls to the frameworks | *Published when it runs* |
+| **Lab 0: Set Up VerifyWise & Meet SupportFlow** | Get your tools working and meet the agent you'll govern all course | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/00_hello_supportflow.ipynb) |
+| **Lab 1: Build the Enterprise AI Inventory, Intake & Agent Registry** | Find every AI system and register the agent as a reviewable record | *No notebook. Google Sheet, VerifyWise* |
+| **Lab 2: Map the Architecture & Define the Agent's Authority** | Diagram how it works, then decide what it's allowed to do | *No notebook. Excalidraw, VerifyWise* |
+| **Lab 3: Assess Agent Data, Privacy & Access Risks** | Trace what data it touches and what it's allowed to reach | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/02_presidio_pii_scan.ipynb) |
+| **Lab 4: Threat-Model & Red-Team the Agent** | Predict how it can be attacked, then actually attack it | *Published when it runs* |
+| **Lab 5: Assess Harms & Define Safety Requirements** | Identify what could go wrong and set measurable safety rules | *Published when it runs* |
+| **Lab 6: Agent Evaluation and Release Readiness** | Test whether it works and decide if it's fit to ship | *Published when it runs* |
+| **Lab 7: Design Human Oversight, Monitoring & Incident Response** | Decide where humans step in, and how you catch and handle failures | *Published when it runs* |
+| **Lab 8: Assess Vendor Risk & Map to Frameworks** | Vet the model/tool vendors and map controls to AIUC-1, NIST, ISO, EU AI Act | *Published when it runs* |
 | **Lab 9: Capstone Project** | Defend a go or no-go decision in front of a review board | *Published when it runs* |
 
 > **Not every lab has a notebook, and that's by design.** Some of the most important work in this course, such as scoping an agent, building an authority model, running an incident tabletop, or defending a decision, is done in a spreadsheet, on a whiteboard, or out loud. Those labs appear above with no badge.
