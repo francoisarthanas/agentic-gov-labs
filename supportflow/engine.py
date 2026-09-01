@@ -299,7 +299,9 @@ def refund_execution_agent(ctx):
             priority="HIGH" if ctx.sentiment["label"] == "negative" else "NORMAL",
             _ctx=ctx)
         t.add("refund_exec", "act", "Above the ceiling. Escalating for approval.",
-              tool="escalate_to_human", tool_args={"priority": res["priority"]},
+              tool="escalate_to_human",
+              tool_args={"summary": res["summary_recorded"],
+                         "priority": res["priority"]},
               tool_result_summary="%s, outcome not visible to the agent" % res["ticket_id"],
               state_change=True, reversible="yes",
               approval_required=True, approval_outcome="escalated")
