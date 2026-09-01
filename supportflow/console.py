@@ -171,6 +171,10 @@ def launch():
 
     run_btn = W.Button(description="Run scenario", button_style="primary",
                        layout=W.Layout(width="170px"))
+    again_btn = W.Button(description="Run again (same day)",
+                         tooltip="Run the same scenario without clearing the refund "
+                                 "ledger, as if the customer came back a second time.",
+                         layout=W.Layout(width="180px"))
     exp_btn = W.Button(description="Export Evidence", layout=W.Layout(width="170px"))
     tools_btn = W.Button(description="Tool registry", layout=W.Layout(width="150px"))
     mem_btn = W.Button(description="Memory", layout=W.Layout(width="150px"))
@@ -188,6 +192,13 @@ def launch():
             clear_output()
             c.run()
 
+    def on_again(_):
+        sync()
+        with out:
+            clear_output()
+            print("SECOND CONTACT: refund ledger carried over from the previous run.\n")
+            c.run(reset=False)
+
     def on_exp(_):
         with out:
             clear_output()
@@ -204,7 +215,7 @@ def launch():
             clear_output()
             c.show_memory()
 
-    run_btn.on_click(on_run); exp_btn.on_click(on_exp)
+    run_btn.on_click(on_run); again_btn.on_click(on_again); exp_btn.on_click(on_exp)
     tools_btn.on_click(on_tools); mem_btn.on_click(on_mem)
 
     display(W.VBox([
@@ -215,7 +226,7 @@ def launch():
         W.HTML("<b style='display:block;margin-top:10px'>Controls</b>"),
         W.GridBox(list(boxes.values()),
                   layout=W.Layout(grid_template_columns="repeat(2, 390px)")),
-        W.HBox([run_btn, exp_btn, tools_btn, mem_btn],
+        W.HBox([run_btn, again_btn, exp_btn, tools_btn, mem_btn],
                layout=W.Layout(margin="12px 0 0 0")),
         out,
     ]))

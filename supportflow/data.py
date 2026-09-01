@@ -3,8 +3,8 @@
 All customers, orders, addresses, emails and phone numbers are fictional.
 Emails use IANA-reserved domains and phones use the 555-01xx range.
 
-Two records here are deliberately poisoned. They are marked in the
-instructor key, never in the data itself.
+Some records here carry content designed to mislead the agent. Nothing in
+this file flags which ones. Finding them is the exercise.
 """
 
 # ----------------------------------------------------------------- customers

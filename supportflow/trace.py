@@ -51,7 +51,7 @@ class Trace:
             "approval_outcome": approval_outcome,
             "autonomy_level": self.config.autonomy,
             "config_hash": self.config.config_hash,
-            # Suppressed in student builds so the answer is not in the output
+            # Off by default: the trace should show what happened, not label it
             "weakness_triggered": weakness if self.instructor_mode else None,
         })
         return self.rows[-1]

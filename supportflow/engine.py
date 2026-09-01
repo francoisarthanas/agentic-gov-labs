@@ -1,8 +1,8 @@
 """SupportFlow v2 run engine.
 
 Deterministic by default. The same configuration and the same scenario
-always produce the same trajectory, which is what makes answer keys exact
-and shared debriefs possible.
+always produce the same trajectory, so two people at the same settings
+see the same thing and can compare notes.
 
 Five agents in a hybrid sequential and supervisor pattern (MGF 1.1.2).
 The supervisor routes and enforces SOP order; four specialists do the work.
