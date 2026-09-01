@@ -1,6 +1,6 @@
 # Agentic AI Governance for GRC & Cybersecurity: Labs
 
-Lab notebooks and the **SupportFlow** sandbox agent for the [Agentic AI Governance for GRC & Cybersecurity](https://maven.com/cyberpros/agentic-ai-governance) course by [François B. Arthanas](https://www.linkedin.com/in/francoisbarthanas/) · [CyberProsAI](https://www.cyberprosai.com/)
+Lab notebooks and the **SupportFlow v2** sandbox agent for the [Agentic AI Governance for GRC & Cybersecurity](https://maven.com/cyberpros/agentic-ai-governance) course by [François B. Arthanas](https://www.linkedin.com/in/francoisbarthanas/) · [CyberProsAI](https://www.cyberprosai.com/)
 
 ---
 
@@ -8,71 +8,81 @@ Lab notebooks and the **SupportFlow** sandbox agent for the [Agentic AI Governan
 
 | Lab | What you do | Open |
 |---|---|---|
-| **Lab 0: Set Up VerifyWise & Meet SupportFlow** | Get your tools working and meet the agent you'll govern all course | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/00_hello_supportflow.ipynb) |
-| **Lab 1: Build the Enterprise AI Inventory, Intake & Agent Registry** | Find every AI system and register the agent as a reviewable record | *No notebook. Google Sheet, VerifyWise* |
-| **Lab 2: Map the Architecture & Define the Agent's Authority** | Diagram how it works, then decide what it's allowed to do | *No notebook. Excalidraw, VerifyWise* |
-| **Lab 3: Assess Agent Data, Privacy & Access Risks** | Trace what data it touches and what it's allowed to reach | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/02_presidio_pii_scan.ipynb) |
-| **Lab 4: Threat-Model & Red-Team the Agent** | Predict how it can be attacked, then actually attack it | *Published when it runs* |
-| **Lab 5: Assess Harms & Define Safety Requirements** | Identify what could go wrong and set measurable safety rules | *Published when it runs* |
-| **Lab 6: Agent Evaluation and Release Readiness** | Test whether it works and decide if it's fit to ship | *Published when it runs* |
-| **Lab 7: Design Human Oversight, Monitoring & Incident Response** | Decide where humans step in, and how you catch and handle failures | *Published when it runs* |
-| **Lab 8: Assess Vendor Risk & Map to Frameworks** | Vet the model/tool vendors and map controls to AIUC-1, NIST, ISO, EU AI Act | *Published when it runs* |
-| **Lab 9: Capstone Project** | Defend a go or no-go decision in front of a review board | *Published when it runs* |
+| **Lab 0: Set Up VerifyWise & Meet SupportFlow** | Get your tools working and meet the agent you'll govern all course | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/00_supportflow_v2.ipynb) |
+| **Lab 1: Build the Enterprise AI Inventory, Intake & Agent Registry** | Find every AI system and register the agent as a reviewable record | *Published when it runs* |
+| **Lab 2: Agent Risk Assessment and Authority Boundary** | Diagram how it works, then decide what it's allowed to do | *Published when it runs* |
+| **Lab 3: Accountability and Human Oversight** | Decide where humans step in, and how you catch and handle failures | *Published when it runs* |
+| **Lab 4: Agent Threat Model, Control, Testing and Remediation** | Predict how it can be attacked, then actually attack it | *Published when it runs* |
+| **Lab 5: Production Governance and User Readiness** | Roll it out, watch it, and know how to stop it | *Published when it runs* |
+| **Lab 6: Framework Crosswalk** | Map your controls to MGF, NIST, ISO 42001 and the EU AI Act | *Published when it runs* |
+| **Lab 7: Capstone Project** | Defend a go or no-go decision in front of a review board | *Published when it runs* |
 
-> **Not every lab has a notebook, and that's by design.** Some of the most important work in this course, such as scoping an agent, building an authority model, running an incident tabletop, or defending a decision, is done in a spreadsheet, on a whiteboard, or out loud. Those labs appear above with no badge.
->
-> **Each lab is published here the week it runs.** This page grows as the course runs.
+**You do not need to know Python.** Click the badge, then **Runtime > Run all**.
 
-**You do not need to know Python.** Click a badge, then **Runtime → Run all**.
-
-**You do not need to run anything at all.** Every lab has a no-code path using the static case packet, and it produces an equally valid Evidence Pack section.
+**You do not need an API key.** SupportFlow runs in deterministic offline mode. The same settings always produce the same result, so your findings are reproducible and so are everyone else's.
 
 ---
 
-## What is SupportFlow?
+## What is SupportFlow v2?
 
-SupportFlow is a customer service refund agent for a fictional retailer, **Northwind Retail**. It can:
+An agentic refund and resolution system for a fictional retailer, **NorthWind Retail**. It is the system you review for the whole course: scoping it, mapping its authority, attacking it, testing it, monitoring it, and finally deciding whether it should ship.
 
-- Answer customer questions from a knowledge base
-- Look up customer accounts and order history
-- Recommend and **issue refunds**
-- Draft customer messages
-- Escalate to a human
+**Five agents** in a hybrid sequential and supervisor pattern:
 
-It is the system you will review for eight weeks: scoping it, mapping its data, attacking it, testing it, monitoring it, and finally deciding whether it should ship.
-
-### ⚠️ This is a training target, not a reference implementation
-
-SupportFlow has real weaknesses. That is what makes it worth reviewing.
-
-Do not copy this code into a production system.
-
----
-
-## Setup
-
-You need a free model API key. Get one at **[aistudio.google.com](https://aistudio.google.com)** → *Get API key*.
-
-**Use a personal Google account, not your work account.** Corporate Workspace tenants often block AI Studio, and you should not attach an ungoverned AI experiment to your employer's tenant, which is, after all, exactly the behavior you are being trained to find.
-
-> **Before you accept the terms, read them.** The free tier permits use of your content to improve Google's products. The paid tier does not. That difference is a billing setting.
->
-> This is your first governance finding in the course, and it is about your own lab environment.
-
-**Blocked or unavailable?** [Groq](https://console.groq.com) and [OpenRouter](https://openrouter.ai) both have free tiers that work here. Ask in `#help`.
-
----
-
-## Run it locally (optional)
-
-```bash
-git clone https://github.com/francoisarthanas/agentic-gov-labs.git
-cd agentic-gov-labs
-pip install -r requirements.txt
-export GOOGLE_API_KEY=your-key-here
-
-python -c "from supportflow.agent import chat_loop; chat_loop()"
 ```
+Customer ──▶ Supervisor ──▶ Intake ──▶ Policy & Eligibility ──▶ Refund Execution ──▶ Comms
+                                                                      │                 │
+                                                                MOVES MONEY       SENDS EMAIL
+                                                                (partially        (external,
+                                                                 reversible)      irreversible)
+```
+
+**Ten tools.** Six read, three write, one control. One of the writes moves money and one cannot be undone.
+
+**An autonomy dial, L1 to L5**, mapped to the four levels of human involvement in the IMDA Model AI Governance Framework for Agentic AI (v1.5).
+
+| Level | Behaviour |
+|---|---|
+| L1 | Drafts everything. A human executes every action |
+| L2 | Executes reads. Asks before any write |
+| **L3** | **Auto-refunds under $200.** Escalates above |
+| **L4** | **Auto-refunds up to $500.** Flags anomalies only |
+| L5 | Full autonomy. After-the-fact audit only |
+
+**Eight independent controls**, each of which you can switch on and off one at a time to see exactly what it was doing.
+
+### Try this first
+
+Run scenario **S2** at **L3**, then run it again at **L4**. Change nothing else.
+
+At L3 the agent escalates for approval. At L4 it moves $310 on its own.
+
+That single dropdown is the whole course.
+
+---
+
+### This is a training target, not a reference implementation
+
+SupportFlow v2 has real, planted weaknesses. That is what makes it worth reviewing.
+
+**Do not copy this design into a production system.**
+
+---
+
+## The Governance Console
+
+Everything students touch is a dropdown, a slider, a checkbox or a button.
+
+| Control | What it does |
+|---|---|
+| Scenario | Which customer situation to run |
+| Autonomy | L1 to L5 |
+| Ceiling | The hard refund cap enforced in tool code |
+| Attack | Arms an attack scenario, for Lab 4 |
+| Eight control toggles | Each safeguard, independently |
+| Run scenario | Produces the full plan-and-act trace |
+| Export Evidence | Timestamped bundle for VerifyWise |
+| Tool registry, memory, policy viewers | Read-only inspection |
 
 ---
 
@@ -80,20 +90,19 @@ python -c "from supportflow.agent import chat_loop; chat_loop()"
 
 ```
 supportflow/
-  prompt.py        the system prompt as deployed
-  tools.py         kb_search, crm_lookup, issue_refund, escalate
-  customers.py     fictional customers and orders
-  kb.py            knowledge base + retrieval
-  agent.py         the agent loop
+  config.py       the autonomy dial, the eight controls, the config hash
+  data.py         customers, orders, the refund SOP, help centre, memory
+  tools.py        ten tools and the inspectable registry
+  engine.py       five agents, the supervisor, the run loop
+  trace.py        JSONL trace, CSV export, evidence bundles
+  scenarios.py    six named scenarios and the attack library
+  console.py      the Governance Console
 
-notebooks/         one per lab that needs code
-data/
-  transcripts/     3 SupportFlow session transcripts
-  logs_sample.jsonl        500 application log lines
-  presidio_findings_prebuilt.csv   no-code path for Lab 3
+notebooks/
+  00_supportflow_v2.ipynb
 ```
 
-**Worth reading even if you never run the code:** `prompt.py` and `tools.py`. The system prompt is the agent's instructions; the tools are what it can actually do. Reviewing both is how you find out which of the two a given rule lives in.
+**Worth reading even if you never run anything:** `data.py` for the refund SOP, and `tools.py` for the registry. The SOP is what the agent is told to do; the registry is what it can actually do. Comparing the two is most of Lab 2.
 
 ---
 
@@ -101,17 +110,23 @@ data/
 
 All customers, orders, addresses, emails and phone numbers are **fictional**. Emails use IANA-reserved domains (`example.com`, `.org`, `.net`) and phone numbers use the 555-01xx range reserved for fictional use.
 
-No real personal data appears anywhere in this repository. The data is realistic in *shape* so that PII scanners detect it, which is the point of Lab 2.
+No real personal data appears anywhere in this repository.
 
-The `_sandbox` field on refund responses is there to make it obvious: **no real money moves.**
+The `_sandbox` flag on every write response is there to make it obvious: **no money moves and no email is sent.**
 
 ---
 
 ## Course rules that apply here
 
 - Do not commit employer, client, or customer data to your fork
-- Do not commit API keys. The notebooks use hidden input for this reason
-- When applying course templates to a real system, anonymize: "Model Provider A", "CRM System", "Refund API"
+- Do not commit API keys. The notebook uses hidden input for this reason
+- When applying course templates to a real system, anonymise: "Model Provider A", "CRM System", "Refund API"
+
+---
+
+## Framework
+
+The course is anchored to the **Model AI Governance Framework for Agentic AI**, v1.5, published by IMDA Singapore on 20 May 2026 and updated 5 June 2026. SupportFlow v2 is built so that all eight MGF core components are present and inspectable, and every MGF risk factor is adjustable rather than asserted.
 
 ---
 
