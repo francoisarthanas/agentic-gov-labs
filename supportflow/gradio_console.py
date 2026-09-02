@@ -17,9 +17,22 @@ from .engine import run as _run
 
 CONTROL_KEYS = list(Controls().as_dict().keys())
 
+# Readable label first, because the audience is governance, not engineering.
+# The identifier stays in the help line: students need it for the control
+# audit sheet and for policy.yaml, and it has to match exactly.
+CONTROL_LABELS = {
+    "human_approval_gate": "Human approval gate",
+    "check_history_before_refund": "Check refund history first",
+    "sanitise_retrieved_content": "Sanitise retrieved content",
+    "sanitise_customer_message": "Sanitise customer message",
+    "memory_write_review": "Review memory writes",
+    "email_recipient_allowlist": "Email recipient allowlist",
+    "scoped_customer_lookup": "Scoped customer lookup",
+    "log_full_context": "Log full context",
+}
+
 CONTROL_HELP = {
     "human_approval_gate": "Refunds above the ceiling require a human to approve",
-    "refund_ceiling": "Hard cap enforced in the tool wrapper",
     "check_history_before_refund": "Look at prior refunds before issuing another",
     "sanitise_retrieved_content": "Strip instruction-like text from help centre results",
     "sanitise_customer_message": "Strip instruction-like text from the customer's message",
@@ -28,6 +41,14 @@ CONTROL_HELP = {
     "scoped_customer_lookup": "Restrict lookups to the customer in this conversation",
     "log_full_context": "Write the assembled context to the trace",
 }
+
+
+def _control_label(key):
+    return CONTROL_LABELS.get(key, key.replace("_", " ").capitalize())
+
+
+def _control_info(key):
+    return f"{CONTROL_HELP.get(key, '')}  ·  {key}"
 
 _TRACE_HEADERS = ["#", "agent", "phase", "tool", "changed state?",
                   "reversible", "reasoning"]
@@ -64,7 +85,7 @@ def _trace_rows(ctx):
 def _summary(ctx, cfg, second_contact=False):
     t = ctx.trace
     lvl = AUTONOMY[cfg.autonomy]
-    head = "SECOND CONTACT — refund ledger carried over\n\n" if second_contact else ""
+    head = "SECOND CONTACT , refund ledger carried over\n\n" if second_contact else ""
     return (
         f"{head}OUTCOME    {ctx.outcome}\n"
         f"{'-' * 62}\n"
@@ -173,31 +194,56 @@ def build(share=False):
 
         gr.Markdown(
             "# SupportFlow v2 · Governance Console\n"
-            "NorthWind Retail · agentic refund and resolution · **live in three "
-            "regions**\n\n"
-            "*Everything here is a dropdown, a slider, a checkbox or a button. "
-            "Nothing requires code.*"
+            "NorthWind Retail · agentic refund and resolution · **live in "
+            "three regions, handling 61% of refund tickets**\n\n"
+            "### You are the governance lead reviewing this system.\n"
+            "The case packet tells you what SupportFlow is **supposed** to do. "
+            "**This console is how you find out whether that is true.**"
         )
+
+        with gr.Accordion("What am I looking for?", open=False):
+            gr.Markdown(
+                "Your job is not to admire the system. It is to test the "
+                "claims made about it.\n\n"
+                "The case packet is full of statements like these. Each one "
+                "sounds like a control. **Only some of them are.**\n\n"
+                "| The packet says | How you check it here |\n"
+                "| :---- | :---- |\n"
+                "| *\"Refunds above the ceiling must be escalated.\"* | Raise "
+                "the autonomy level and leave the ceiling alone. Did anything "
+                "change? |\n"
+                "| *\"Do not split a resolution into multiple smaller "
+                "actions.\"* | Run a scenario, then press **Run again (same "
+                "day)** and add up what was paid. |\n"
+                "| *\"Only discuss the account belonging to the person you "
+                "are speaking with.\"* | Look at the tool registry. What "
+                "would stop it reading another record? |\n\n"
+                "A control you can switch off and watch fail is **enforced**. "
+                "A control that is only written down is a **request**. "
+                "Telling those apart is the whole job, and it is what the "
+                "next six weeks are for.\n\n"
+                "*Nothing here is real. No money moves and no email is sent.*"
+            )
 
         with gr.Tab("Console"):
             gr.Markdown(
                 "**A scenario is one customer contacting support once.** "
                 "Pick one, set how much freedom the agent has, then press "
                 "**Run scenario** and read what it did.")
-            with gr.Row():
-                scn = gr.Dropdown(scen_choices, value="S1", label="Scenario",
-                                  scale=3)
-                atk = gr.Dropdown(atk_choices, value="none", label="Attack",
-                                  scale=3)
+            scn = gr.Dropdown(scen_choices, value="S1", label="Scenario")
             brief = gr.Markdown(briefing("S1"))
             with gr.Row():
                 lvl = gr.Dropdown(auto_choices, value="L3",
                                   label="Autonomy level", scale=3)
                 ceil = gr.Slider(0, 1000, value=200, step=50,
-                                 label="Refund ceiling ($) — enforced in tool code",
+                                 label="Refund ceiling ($), enforced in tool code",
                                  scale=3)
 
-            gr.Markdown("### Controls")
+            gr.Markdown(
+                "### Controls\n"
+                "*Eight safeguards, each independent. Switch one off, run "
+                "again, and see whether the outcome changes. If it does not, "
+                "ask what that control was doing.*")
             boxes = []
             defaults = Controls().as_dict()
             keys = list(defaults)
@@ -205,8 +251,16 @@ def build(share=False):
                 with gr.Row():
                     for k in keys[i:i + 2]:
                         boxes.append(gr.Checkbox(
-                            value=defaults[k], label=k,
-                            info=CONTROL_HELP.get(k, "")))
+                            value=defaults[k], label=_control_label(k),
+                            info=_control_info(k)))
+
+            with gr.Accordion("Attack simulation · used in Week 4",
+                              open=False):
+                gr.Markdown(
+                    "Arms an adversarial scenario. **Leave this on "
+                    "'No attack' until Week 4.** It is here so you can see "
+                    "the whole control surface, not because you need it yet.")
+                atk = gr.Dropdown(atk_choices, value="none", label="Attack")
 
             with gr.Row():
                 run_btn = gr.Button("Run scenario", variant="primary", scale=2)
