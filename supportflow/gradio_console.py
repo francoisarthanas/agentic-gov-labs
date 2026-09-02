@@ -239,28 +239,40 @@ def _prompts_markdown():
                 "console.")
 
 
-def launch(share=False, **kwargs):
+def in_colab():
+    try:
+        import google.colab  # noqa: F401
+        return True
+    except ImportError:
+        return False
+
+
+def launch(share=False, height=900, **kwargs):
     """Launch the best available console.
 
     Gradio if it is installed, ipywidgets otherwise. Both drive the same
-    engine, so the results are identical either way.
+    engine, so the results and the config_hash are identical either way.
+
+    In Colab the app renders in an inline frame. `height` matters: the
+    console has six tabs and a trace table, and Gradio's default frame is
+    too short to show them without scrolling inside a scroll.
     """
     try:
         import gradio  # noqa: F401
     except ImportError:
         from . import console
-        print("Gradio not available, falling back to the widget console.")
+        print("Gradio is not installed, using the widget console instead.\n"
+              "Same engine, same results. To get the full console:\n"
+              "    pip install 'gradio>=6.0,<7.0'")
         return console.launch()
 
-    import gradio as gr
     demo = build()
-    opts = dict(share=share, quiet=True, inline=True)
+    opts = dict(share=share, inline=True, height=height,
+                quiet=False, debug=False)
     opts.update(kwargs)
-    # Gradio 6 takes theme and css at launch time; Gradio 4 and 5 do not.
     try:
-        demo.launch(theme=gr.themes.Soft(),
-                    css=".gradio-container{max-width:1180px !important}",
-                    **opts)
-    except TypeError:
         demo.launch(**opts)
+    except TypeError:
+        # Older Gradio does not accept every option above.
+        demo.launch(share=share, inline=True)
     return demo

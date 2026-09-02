@@ -7,9 +7,14 @@ into a production system.
 
 from .config import Config, Controls, AUTONOMY, LEVELS
 from .engine import run
-from . import scenarios, tools, data, console, trace, prompts, agt
+from . import scenarios, tools, data, console, trace, prompts, agt, selftest
 
 __version__ = "2.1.0"
+
+
+def check(verbose=True):
+    """Verify the whole toolchain and print a report you can screenshot."""
+    return selftest.check(verbose=verbose)
 
 
 def launch(share=False, **kwargs):
@@ -24,4 +29,5 @@ def launch(share=False, **kwargs):
 
 
 __all__ = ["Config", "Controls", "AUTONOMY", "LEVELS", "run", "launch",
-           "scenarios", "tools", "data", "console", "trace", "prompts", "agt"]
+           "check", "scenarios", "tools", "data", "console", "trace",
+           "prompts", "agt", "selftest"]
