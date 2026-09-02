@@ -51,6 +51,12 @@ Customer ──▶ Supervisor ──▶ Intake ──▶ Policy & Eligibility �
 
 **Eight independent controls**, each of which you can switch on and off one at a time to see exactly what it was doing.
 
+**A Governance Console** built in Gradio, with the trace, the tool registry, the refund SOP, the agent instructions, the memory store and the evidence export all in one interface.
+
+**Prompt security scanning** via the [Microsoft Agent Governance Toolkit](https://github.com/microsoft/agent-governance-toolkit), MIT licensed. Point it at SupportFlow's own agent instructions and see what they score against twelve prompt-attack vectors.
+
+**Policy as something that executes.** Write the authority boundary as a YAML file that is enforced in code, rather than describing it in a document.
+
 ### Try this first
 
 Run scenario **S2** at **L3**, then run it again at **L4**. Change nothing else.
@@ -96,7 +102,10 @@ supportflow/
   engine.py       five agents, the supervisor, the run loop
   trace.py        JSONL trace, CSV export, evidence bundles
   scenarios.py    six named scenarios and the attack library
-  console.py      the Governance Console
+  console.py      the Governance Console, widget fallback
+  gradio_console.py  the Governance Console
+  prompts.py      the five agent instruction sets, as deployed
+  agt.py          bridge to the Microsoft Agent Governance Toolkit
 
 notebooks/
   00_supportflow_v2.ipynb

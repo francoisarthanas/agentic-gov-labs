@@ -7,8 +7,21 @@ into a production system.
 
 from .config import Config, Controls, AUTONOMY, LEVELS
 from .engine import run
-from . import scenarios, tools, data, console, trace
+from . import scenarios, tools, data, console, trace, prompts, agt
 
-__version__ = "2.0.0"
-__all__ = ["Config", "Controls", "AUTONOMY", "LEVELS", "run",
-           "scenarios", "tools", "data", "console", "trace"]
+__version__ = "2.1.0"
+
+
+def launch(share=False, **kwargs):
+    """Open the Governance Console.
+
+    Uses Gradio when it is available and falls back to the ipywidgets
+    console otherwise. Both drive the same engine, so the results and the
+    config_hash are identical either way.
+    """
+    from . import gradio_console
+    return gradio_console.launch(share=share, **kwargs)
+
+
+__all__ = ["Config", "Controls", "AUTONOMY", "LEVELS", "run", "launch",
+           "scenarios", "tools", "data", "console", "trace", "prompts", "agt"]

@@ -1,6 +1,27 @@
-# SupportFlow v2 runs on the Python standard library alone.
-# Nothing here is required to complete any lab.
-#
-# ipywidgets ships with Google Colab and powers the Governance Console.
-# If it is missing the Console falls back to a text interface.
+# SupportFlow v2 itself runs on the Python standard library alone.
+# Everything below is either the interface or the assessment tooling.
+
+# ---------------------------------------------------------------- interface
+# The Governance Console. Gradio embeds directly in a Colab notebook.
+gradio>=6.0,<7.0
+
+# Fallback console, in case Gradio is blocked on a locked-down network.
+# Ships with Colab already.
 ipywidgets>=8.0
+
+# --------------------------------------------------------------- assessment
+# Microsoft Agent Governance Toolkit, MIT licensed.
+#
+# PINNED ON PURPOSE. AGT is in public preview and its own README says
+# breaking changes are possible before GA. An unpinned version would break
+# a lab mid-cohort.
+#
+# Note: the toolkit core requires Python 3.11 or newer, despite the README
+# saying 3.10+. Google Colab runs 3.12, so this is fine there.
+agent-governance-toolkit==4.1.0
+
+# ------------------------------------------------------------------ optional
+# Agent red teaming for the Lab 4 stretch track. Requires Python 3.12+ and
+# a model API key. Uncomment if you are running the optional track.
+#
+# giskard[google,scan]>=3.0.0b1
