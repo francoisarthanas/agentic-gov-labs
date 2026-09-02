@@ -85,7 +85,8 @@ def _trace_rows(ctx):
 def _summary(ctx, cfg, second_contact=False):
     t = ctx.trace
     lvl = AUTONOMY[cfg.autonomy]
-    head = "SECOND CONTACT , refund ledger carried over\n\n" if second_contact else ""
+    head = ("SECOND CONTACT: refund ledger carried over from the previous run\n\n"
+            if second_contact else "")
     return (
         f"{head}OUTCOME    {ctx.outcome}\n"
         f"{'-' * 62}\n"
