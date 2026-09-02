@@ -17,15 +17,17 @@ def check(verbose=True):
     return selftest.check(verbose=verbose)
 
 
-def launch(share=False, **kwargs):
+def launch(share=None, **kwargs):
     """Open the Governance Console.
 
     Uses Gradio when it is available and falls back to the ipywidgets
     console otherwise. Both drive the same engine, so the results and the
     config_hash are identical either way.
+
+    Returns nothing, so the notebook does not print the interface object.
     """
     from . import gradio_console
-    return gradio_console.launch(share=share, **kwargs)
+    gradio_console.launch(share=share, **kwargs)
 
 
 __all__ = ["Config", "Controls", "AUTONOMY", "LEVELS", "run", "launch",

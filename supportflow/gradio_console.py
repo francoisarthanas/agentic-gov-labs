@@ -107,6 +107,28 @@ def again(scenario, level, ceiling, attack, *toggles):
             _controls_line(cfg), _trace_rows(ctx))
 
 
+def briefing(scenario):
+    """The ticket, as a support agent would receive it.
+
+    A scenario is one customer contacting support once. This is what the
+    agent is given before it does anything.
+    """
+    s = scenarios.SCENARIOS[scenario]
+    cust = data.CUSTOMERS.get(s["customer_id"], {})
+    order = data.ORDERS.get(s["order_number"], {})
+    name = cust.get("full_name", s["customer_id"])
+    total = order.get("total")
+    return (
+        f"### Incoming ticket · {s['id']}\n\n"
+        f"**{name}** · order `{s['order_number']}`"
+        + (f" · order value **${total:,.2f}**" if total else "") + "\n\n"
+        f"> {s['message']}\n\n"
+        f"**They are asking for ${s['requested_amount']:,.2f}.** "
+        f"Reason code recorded as `{s['reason_code']}`.\n\n"
+        f"Press **Run scenario** and watch what the agent does with it."
+    )
+
+
 def memory(scenario, attack):
     """Persistent customer notes for the scenario's customer."""
     cid = scenarios.SCENARIOS[scenario]["customer_id"]
@@ -158,11 +180,16 @@ def build(share=False):
         )
 
         with gr.Tab("Console"):
+            gr.Markdown(
+                "**A scenario is one customer contacting support once.** "
+                "Pick one, set how much freedom the agent has, then press "
+                "**Run scenario** and read what it did.")
             with gr.Row():
                 scn = gr.Dropdown(scen_choices, value="S1", label="Scenario",
                                   scale=3)
                 atk = gr.Dropdown(atk_choices, value="none", label="Attack",
                                   scale=3)
+            brief = gr.Markdown(briefing("S1"))
             with gr.Row():
                 lvl = gr.Dropdown(auto_choices, value="L3",
                                   label="Autonomy level", scale=3)
@@ -224,6 +251,7 @@ def build(share=False):
         again_btn.click(again, inputs, outputs)
         mem_btn.click(memory, [scn, atk], mem_out)
         exp_btn.click(lambda: export(), None, exp_out)
+        scn.change(briefing, scn, brief)
 
     return demo
 
@@ -247,15 +275,19 @@ def in_colab():
         return False
 
 
-def launch(share=False, height=900, **kwargs):
-    """Launch the best available console.
+def launch(share=None, height=900, **kwargs):
+    """Open the Governance Console.
 
     Gradio if it is installed, ipywidgets otherwise. Both drive the same
     engine, so the results and the config_hash are identical either way.
 
-    In Colab the app renders in an inline frame. `height` matters: the
-    console has six tabs and a trace table, and Gradio's default frame is
-    too short to show them without scrolling inside a scroll.
+    In Colab this defaults to `share=True`. Gradio's inline proxy renders
+    an empty frame often enough that a shared link is the reliable path,
+    and everything in this app is fictional and ephemeral.
+
+    Returns None on purpose. Returning the Blocks object makes Jupyter
+    print its repr, which buries the console under a wall of component
+    addresses.
     """
     try:
         import gradio  # noqa: F401
@@ -264,15 +296,29 @@ def launch(share=False, height=900, **kwargs):
         print("Gradio is not installed, using the widget console instead.\n"
               "Same engine, same results. To get the full console:\n"
               "    pip install 'gradio>=6.0,<7.0'")
-        return console.launch()
+        console.launch()
+        return None
+
+    if share is None:
+        share = in_colab()
 
     demo = build()
     opts = dict(share=share, inline=True, height=height,
-                quiet=False, debug=False)
+                quiet=False, debug=False, show_error=True)
     opts.update(kwargs)
+
     try:
         demo.launch(**opts)
     except TypeError:
-        # Older Gradio does not accept every option above.
         demo.launch(share=share, inline=True)
-    return demo
+    except Exception as exc:                       # tunnel blocked, etc.
+        print(f"\nCould not open a shared link ({type(exc).__name__}). "
+              f"Trying the inline frame instead.")
+        try:
+            demo.launch(share=False, inline=True, height=height, quiet=False)
+        except Exception:
+            from . import console
+            print("Gradio could not start. Using the widget console.\n"
+                  "Same engine, same results.")
+            console.launch()
+    return None
