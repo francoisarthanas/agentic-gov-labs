@@ -251,8 +251,15 @@ def export(folder="evidence"):
             + "\nAttach these to your VerifyWise record.")
 
 
-def build(share=False):
-    """Construct the Gradio Blocks app. Returns the demo without launching."""
+def build(share=False, sandbox=False):
+    """Construct the Gradio Blocks app. Returns the demo without launching.
+
+    `sandbox` adds a free-text customer message box. It is off by default
+    and should stay off until a live model is wired in. Against the offline
+    rules engine the box only exercises a four-pattern regex, so a student
+    can write a genuinely clever injection, see "nothing matched", and draw
+    exactly the wrong conclusion.
+    """
     import gradio as gr
 
     scen_choices = [(f"{s['id']}  {s['title']}", s["id"])
@@ -304,22 +311,25 @@ def build(share=False):
             scn = gr.Dropdown(scen_choices, value="S1", label="Scenario")
             brief = gr.Markdown(briefing("S1"))
 
-            with gr.Accordion("Write your own message and see what happens",
-                              open=False):
-                gr.Markdown(
-                    "Edit what the customer says, then run it. The agent "
-                    "treats your text exactly as it treats the real one.\n\n"
-                    "**Things worth trying:** ask for far more than the "
-                    "order was worth · ask for the money to go to a "
-                    "different address · tell the agent it has been "
-                    "authorised for a larger amount · tell it not to check "
-                    "with anyone.")
-                custom = gr.Textbox(
-                    value=scenario_message("S1"), lines=4,
-                    label="The customer's message",
-                    placeholder="Type what the customer says...")
-                custom_btn = gr.Button("Run with my message")
-                detect = gr.Markdown()
+            custom = custom_btn = detect = None
+            if sandbox:
+                with gr.Accordion("Write your own message and see what "
+                                  "happens", open=False):
+                    gr.Markdown(
+                        "Edit what the customer says, then run it. A live "
+                        "model reads your text the way it reads a real "
+                        "customer's.\n\n"
+                        "**Things worth trying:** ask for far more than the "
+                        "order was worth · ask for the money to go to a "
+                        "different address · tell the agent it has been "
+                        "authorised for a larger amount · tell it not to "
+                        "check with anyone.")
+                    custom = gr.Textbox(
+                        value=scenario_message("S1"), lines=4,
+                        label="The customer's message",
+                        placeholder="Type what the customer says...")
+                    custom_btn = gr.Button("Run with my message")
+                    detect = gr.Markdown()
             with gr.Row():
                 lvl = gr.Dropdown(auto_choices, value="L3",
                                   label="Autonomy level", scale=3)
@@ -394,10 +404,11 @@ def build(share=False):
         again_btn.click(again, inputs, outputs)
         mem_btn.click(memory, [scn, atk], mem_out)
         exp_btn.click(lambda: export(), None, exp_out)
-        custom_btn.click(go_custom, [scn, lvl, ceil, atk, custom] + boxes,
-                         outputs + [detect])
         scn.change(briefing, scn, brief)
-        scn.change(scenario_message, scn, custom)
+        if sandbox:
+            custom_btn.click(go_custom, [scn, lvl, ceil, atk, custom] + boxes,
+                             outputs + [detect])
+            scn.change(scenario_message, scn, custom)
 
     return demo
 
@@ -442,7 +453,7 @@ def _quieten(captured):
             print(line)
 
 
-def launch(share=None, height=900, **kwargs):
+def launch(share=None, height=900, sandbox=False, **kwargs):
     """Open the Governance Console.
 
     Gradio if it is installed, ipywidgets otherwise. Both drive the same
@@ -472,7 +483,7 @@ def launch(share=None, height=900, **kwargs):
     import contextlib
     import io as _io
 
-    demo = build()
+    demo = build(sandbox=sandbox)
     opts = dict(share=share, inline=True, height=height,
                 quiet=False, debug=False, show_error=True)
     opts.update(kwargs)
