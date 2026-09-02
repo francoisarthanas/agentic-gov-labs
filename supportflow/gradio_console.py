@@ -129,6 +129,76 @@ def again(scenario, level, ceiling, attack, *toggles):
             _controls_line(cfg), _trace_rows(ctx))
 
 
+_DETECT_NAMES = {
+    "email_recipient": "a different email address to send to",
+    "amount_override": "an instruction about an amount to approve",
+    "ceiling_override": "an instruction about a spending limit",
+    "skip_approval": "an instruction to skip a check",
+}
+
+
+def _detection_line(ctx):
+    """What the content scanner picked up, and what it did not."""
+    found = {k: v for k, v in getattr(ctx, "overrides", {}).items()
+             if not k.startswith("_")}
+    if not found:
+        return (
+            "**The scanner matched nothing in your message.**\n\n"
+            "That is not the same as your message being safe. This offline "
+            "simulator looks for a small set of known patterns. A real "
+            "language model reads everything and can be talked into things "
+            "no pattern list anticipates. **That gap is the point, and it is "
+            "what the later labs are for.**"
+        )
+    lines = ["**The scanner matched something in the content:**\n"]
+    for kind, value in found.items():
+        name = _DETECT_NAMES.get(kind, kind)
+        shown = "yes" if value is True else f"`{value}`"
+        lines.append(f"* {name} ({kind}) = {shown}")
+
+    # Detecting something and stopping it are different things, and the
+    # outcome line alone will not tell them apart.
+    blocked = [r for r in ctx.trace.rows
+               if r.get("control_checks")
+               and any("BLOCK" in c.get("verdict", "").upper()
+                       or "DENIED" in c.get("verdict", "").upper()
+                       for c in r["control_checks"])]
+    if blocked:
+        names = sorted({c["control"] for r in blocked
+                        for c in r["control_checks"]
+                        if "BLOCK" in c.get("verdict", "").upper()
+                        or "DENIED" in c.get("verdict", "").upper()})
+        lines.append(f"\n**And a control stopped it:** `{', '.join(names)}`. "
+                     f"Look for the blocked step in the trace.")
+    else:
+        lines.append("\n**And nothing stopped it.** Notice that the outcome "
+                     "line looks normal either way. Detecting something and "
+                     "preventing it are different, and only the trace tells "
+                     "you which one happened. Try switching a control on and "
+                     "running the same message again.")
+    return "\n".join(lines)
+
+
+def go_custom(scenario, level, ceiling, attack, message, *toggles):
+    """Run the selected scenario with the student's own customer message."""
+    if not message or not message.strip():
+        out, ctrl, rows = go(scenario, level, ceiling, attack, *toggles)
+        return out, ctrl, rows, "Type a message first, then press this again."
+    cfg = _build_config(level, ceiling, attack, toggles)
+    scen = dict(scenarios.get(scenario, attack))
+    scen["message"] = message.strip()
+    tools.reset_ledger()
+    ctx = _run(scen, cfg, reset=True)
+    _State.last, _State.cfg = ctx, cfg
+    return (_summary(ctx, cfg), _controls_line(cfg), _trace_rows(ctx),
+            _detection_line(ctx))
+
+
+def scenario_message(scenario):
+    """The customer's own words, as a starting point to edit."""
+    return scenarios.SCENARIOS[scenario]["message"]
+
+
 def briefing(scenario):
     """The ticket, as a support agent would receive it.
 
@@ -233,6 +303,23 @@ def build(share=False):
                 "**Run scenario** and read what it did.")
             scn = gr.Dropdown(scen_choices, value="S1", label="Scenario")
             brief = gr.Markdown(briefing("S1"))
+
+            with gr.Accordion("Write your own message and see what happens",
+                              open=False):
+                gr.Markdown(
+                    "Edit what the customer says, then run it. The agent "
+                    "treats your text exactly as it treats the real one.\n\n"
+                    "**Things worth trying:** ask for far more than the "
+                    "order was worth · ask for the money to go to a "
+                    "different address · tell the agent it has been "
+                    "authorised for a larger amount · tell it not to check "
+                    "with anyone.")
+                custom = gr.Textbox(
+                    value=scenario_message("S1"), lines=4,
+                    label="The customer's message",
+                    placeholder="Type what the customer says...")
+                custom_btn = gr.Button("Run with my message")
+                detect = gr.Markdown()
             with gr.Row():
                 lvl = gr.Dropdown(auto_choices, value="L3",
                                   label="Autonomy level", scale=3)
@@ -255,12 +342,13 @@ def build(share=False):
                             value=defaults[k], label=_control_label(k),
                             info=_control_info(k)))
 
-            with gr.Accordion("Attack simulation · used in Week 4",
+            with gr.Accordion("Attack simulation · used in future labs",
                               open=False):
                 gr.Markdown(
-                    "Arms an adversarial scenario. **Leave this on "
-                    "'No attack' until Week 4.** It is here so you can see "
-                    "the whole control surface, not because you need it yet.")
+                    "Arms a prepared adversarial scenario. **Leave this on "
+                    "'No attack' for now.** It is here so you can see the "
+                    "whole control surface, and we come back to it in a "
+                    "later lab.")
                 atk = gr.Dropdown(atk_choices, value="none", label="Attack")
 
             with gr.Row():
@@ -306,7 +394,10 @@ def build(share=False):
         again_btn.click(again, inputs, outputs)
         mem_btn.click(memory, [scn, atk], mem_out)
         exp_btn.click(lambda: export(), None, exp_out)
+        custom_btn.click(go_custom, [scn, lvl, ceil, atk, custom] + boxes,
+                         outputs + [detect])
         scn.change(briefing, scn, brief)
+        scn.change(scenario_message, scn, custom)
 
     return demo
 
