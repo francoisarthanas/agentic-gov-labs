@@ -8,7 +8,7 @@ Lab notebooks and the **SupportFlow v2** sandbox agent for the [Agentic AI Gover
 
 | Lab | What you do | Open |
 |---|---|---|
-| **Lab 0: Set Up VerifyWise & Meet SupportFlow** | Get your tools working and meet the agent you'll govern all course | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/00_supportflow_v2.ipynb) |
+| **Lab 0: Meet the System You Have to Answer For** | Get your tools working and meet the agent you'll govern all course | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/00_supportflow_v2.ipynb) |
 | **Lab 1: Build the Enterprise AI Inventory, Intake & Agent Registry** | Find every AI system and register the agent as a reviewable record | *Published when it runs* |
 | **Lab 2: Agent Risk Assessment and Authority Boundary** | Diagram how it works, then decide what it's allowed to do | *Published when it runs* |
 | **Lab 3: Accountability and Human Oversight** | Decide where humans step in, and how you catch and handle failures | *Published when it runs* |
@@ -108,7 +108,8 @@ supportflow/
   agt.py          bridge to the Microsoft Agent Governance Toolkit
 
 notebooks/
-  00_supportflow_v2.ipynb
+  00_supportflow_v2.ipynb      Lab 0: the Console
+  01_governance_toolkit.ipynb  Labs 2 and 4: prompt scanning and policy
 ```
 
 **Worth reading even if you never run anything:** `data.py` for the refund SOP, and `tools.py` for the registry. The SOP is what the agent is told to do; the registry is what it can actually do. Comparing the two is most of Lab 2.
