@@ -421,6 +421,27 @@ def in_colab():
         return False
 
 
+# Gradio hardcodes an advert for Hugging Face Spaces into launch() and gives
+# no flag to turn it off. It also claims the link lasts a week, which is
+# misleading here: the tunnel dies with the Colab session, not after 7 days.
+_NOISE = (
+    "This share link is temporary",
+    "gradio deploy",
+    "Hugging Face",
+    "huggingface.co/spaces",
+    "To create a public link",
+    "set debug=True in launch()",
+    "Colab notebook detected",
+)
+
+
+def _quieten(captured):
+    """Print Gradio's launch output without the vendor advertising."""
+    for line in captured.splitlines():
+        if line.strip() and not any(n in line for n in _NOISE):
+            print(line)
+
+
 def launch(share=None, height=900, **kwargs):
     """Open the Governance Console.
 
@@ -448,16 +469,23 @@ def launch(share=None, height=900, **kwargs):
     if share is None:
         share = in_colab()
 
+    import contextlib
+    import io as _io
+
     demo = build()
     opts = dict(share=share, inline=True, height=height,
                 quiet=False, debug=False, show_error=True)
     opts.update(kwargs)
 
+    buf = _io.StringIO()
     try:
-        demo.launch(**opts)
+        with contextlib.redirect_stdout(buf):
+            demo.launch(**opts)
+        _quieten(buf.getvalue())
     except TypeError:
         demo.launch(share=share, inline=True)
     except Exception as exc:                       # tunnel blocked, etc.
+        _quieten(buf.getvalue())
         print(f"\nCould not open a shared link ({type(exc).__name__}). "
               f"Trying the inline frame instead.")
         try:
@@ -467,4 +495,8 @@ def launch(share=None, height=900, **kwargs):
             print("Gradio could not start. Using the widget console.\n"
                   "Same engine, same results.")
             console.launch()
+
+    print("\nThis console runs inside your Colab session. Close the tab or "
+          "let it go idle and it stops.\nRe-run this cell any time to bring "
+          "it back. Nothing is saved between sessions.")
     return None
