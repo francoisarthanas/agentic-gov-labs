@@ -9,7 +9,6 @@ says what to do about it.
 """
 
 import hashlib
-import os
 import platform
 import sys
 
@@ -58,18 +57,6 @@ def _check_toolkit():
         return _row("Governance toolkit", f"v{agt.PINNED}", _OK)
     return _row("Governance toolkit", "not installed", _WARN,
                 "Only needed from Week 2. Run the Lab 2 notebook then.")
-
-
-def _check_api_key():
-    key = os.environ.get("GOOGLE_API_KEY", "")
-    if key and len(key) > 20:
-        return _row("API key", f"found, ends {key[-4:]}", _OK)
-    if key:
-        return _row("API key", "looks too short", _WARN,
-                    "Check you pasted the whole key.")
-    return _row("API key", "not set", _WARN,
-                "Needed from Week 4. Add it to Colab Secrets as "
-                "GOOGLE_API_KEY.")
 
 
 def _check_engine():
@@ -137,7 +124,7 @@ def _check_tools():
 
 
 CHECKS = [_check_python, _check_supportflow, _check_gradio, _check_toolkit,
-          _check_api_key, _check_engine, _check_determinism,
+          _check_engine, _check_determinism,
           _check_case_packet, _check_tools]
 
 
