@@ -103,7 +103,7 @@ supportflow/
   trace.py        JSONL trace, CSV export, evidence bundles
   scenarios.py    six named scenarios and the attack library
   selftest.py     eight setup checks, the Lab 0 submission artifact
-  accountability.py  Lab 3: escalation, oversight and RACI evidence reports
+  accountability.py  Lab 3: six reports, escalation through the approval packet
   console.py      the Governance Console, widget fallback
   gradio_console.py  the Governance Console
   prompts.py      the five agent instruction sets, as deployed

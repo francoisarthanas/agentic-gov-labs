@@ -306,8 +306,136 @@ def raci(verbose=True):
     return rows
 
 
+# ------------------------------------------------------------------ 5. dana
+
+def dana(verbose=True):
+    """The change request on the governance lead's desk.
+
+    Support Ops has asked to move from L3 with a $200 ceiling to L4 with a
+    $500 ceiling before the holiday peak. This runs every scenario under
+    both settings and counts what still reaches a person.
+    """
+    ids = list(scenarios.SCENARIOS.keys())
+    today, asked = [], []
+    for sid in ids:
+        a = _base(scenario=sid, autonomy="L3", refund_ceiling=200.0)
+        b = _base(scenario=sid, autonomy="L4", refund_ceiling=500.0)
+        today.append((sid, a.outcome, _escalated(a)))
+        asked.append((sid, b.outcome, _escalated(b)))
+    n_today = sum(1 for _, _, e in today if e)
+    n_asked = sum(1 for _, _, e in asked if e)
+
+    if verbose:
+        _hdr("THE REQUEST: RAISE THE CEILING BEFORE THE HOLIDAY PEAK",
+             "Today: L3, $200 ceiling.   Requested: L4, $500 ceiling.")
+        print(f"  {'Scenario':10}{'Today':32}{'If granted':32}")
+        print("  " + _RULE[:W - 2])
+        for (sid, o1, e1), (_, o2, e2) in zip(today, asked):
+            mark = "  <-- changes" if o1 != o2 else ""
+            print(f"  {sid:10}{str(o1):32}{str(o2) + mark:32}")
+        print("=" * W)
+        print(f"  Reach a human today:        {n_today} of {len(ids)}")
+        print(f"  Reach a human if granted:   {n_asked} of {len(ids)}")
+        print()
+        print("  The architecture notes record that the original pilot was")
+        print("  approved in a meeting, and that nobody knows whether that was")
+        print("  written down. This request will arrive the same way unless")
+        print("  something now says who may approve it.")
+        print("=" * W)
+    return n_today, n_asked, today, asked
+
+
+# ---------------------------------------------------------------- 6. packet
+
+def packet(verbose=True):
+    """What the human approver received, against what the system knew.
+
+    The MGF asks for approval requests that are contextual and digestible
+    while making the risk clear. This puts the one-line summary next to
+    everything that was already in the run context when it was written.
+    """
+    ctx = _base(scenario="S2")
+    esc = next((r for r in ctx.trace.rows
+                if r.get("tool") == "escalate_to_human"), None)
+    if esc is None:
+        if verbose:
+            print("S2 did not escalate. Check the gate and ceiling.")
+        return None
+
+    received = dict(esc.get("tool_args") or {})
+    hist_called = any(r.get("tool") == "check_refund_history"
+                      for r in ctx.trace.rows)
+    cust, order, dec, sent = ctx.customer, ctx.order, ctx.decision, ctx.sentiment
+
+    known = [
+        ("Customer", f"{cust.get('full_name')}, customer since "
+                     f"{cust.get('account_created')}"),
+        ("Lifetime value", f"${cust.get('lifetime_value', 0):,.0f}"),
+        ("Refunds, last 12 months", str(cust.get("refunds_last_12mo"))),
+        ("Order", f"{order.get('order_number')}: "
+                  f"{', '.join(order.get('items', []))}, ${order.get('total')}"),
+        ("Order status on file", f"{order.get('status')}, delivered "
+                                 f"{order.get('delivered_date')}"),
+        ("Customer says", ctx.scenario.get("message", "")),
+        ("Reason code applied", dec.get("reason")),
+        ("Amount proposed", f"${dec.get('amount'):.2f}"),
+        ("Sentiment (ToneLens)", f"{sent.get('label')} ({sent.get('sentiment')})"),
+        ("Policy consulted", ", ".join(ctx.policy_sections or [])),
+        ("Tool that would run", "issue_refund, partially reversible"),
+        ("Refund history checked", "yes" if hist_called else "NO, tool not called"),
+    ]
+
+    # The approval packet elements the course asks students to design for.
+    # SENT = in the summary. KNOWN = in the run context but not sent.
+    # MISSING = the system never established it.
+    summary = str(received.get("summary", "")).lower()
+    elements = [
+        ("Customer and order context",
+         "SENT" if order.get("order_number", "").lower() in summary
+         and cust.get("full_name", "").lower() in summary else "KNOWN"),
+        ("Refund amount", "SENT" if "310" in summary else "KNOWN"),
+        ("Applicable policy rule", "KNOWN"),
+        ("Fraud or sentiment signal", "KNOWN"),
+        ("Proposed tool call", "KNOWN"),
+        ("Consequence", "MISSING"),
+        ("Reversibility", "KNOWN"),
+        ("Confidence or uncertainty", "MISSING"),
+        ("Alternative actions", "MISSING"),
+        ("Why it was escalated", "SENT"),
+    ]
+
+    if verbose:
+        _hdr("THE APPROVAL PACKET",
+             "S2, $310, escalated. What the approver got, next to what existed.")
+        print("  WHAT THE HUMAN RECEIVED")
+        print("  " + _RULE[:W - 2])
+        for k, v in received.items():
+            print(f"    {k:10} {v}")
+        print()
+        print("  WHAT THE SYSTEM KNEW WHEN IT WROTE THAT")
+        print("  " + _RULE[:W - 2])
+        for k, v in known:
+            print(f"    {k:26} {v}")
+        print()
+        print("  THE PACKET, ELEMENT BY ELEMENT")
+        print("  " + _RULE[:W - 2])
+        print(f"    {'Element':32}{'Status':10}")
+        for k, v in elements:
+            print(f"    {k:32}{v:10}")
+        counts = {}
+        for _, v in elements:
+            counts[v] = counts.get(v, 0) + 1
+        print("=" * W)
+        print("  " + "   ".join(f"{k}: {v}" for k, v in sorted(counts.items())))
+        print()
+        print("  KNOWN means the information was in the run context and was")
+        print("  not sent. The system had it. The human did not.")
+        print("=" * W)
+    return received, known, elements
+
+
 def report():
-    """All four, in order. This is the Lab 3 submission artifact."""
+    """All six, in order. This is the Lab 3 submission artifact."""
     triggers()
     print()
     sweep()
@@ -315,3 +443,7 @@ def report():
     wall_or_sign()
     print()
     raci()
+    print()
+    dana()
+    print()
+    packet()
