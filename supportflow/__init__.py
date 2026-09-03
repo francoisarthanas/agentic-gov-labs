@@ -7,7 +7,8 @@ into a production system.
 
 from .config import Config, Controls, AUTONOMY, LEVELS
 from .engine import run
-from . import scenarios, tools, data, console, trace, prompts, agt, selftest
+from . import (scenarios, tools, data, console, trace, prompts, agt,
+               selftest, accountability)
 
 __version__ = "2.1.0"
 
@@ -30,6 +31,12 @@ def launch(share=None, **kwargs):
     gradio_console.launch(share=share, **kwargs)
 
 
+def accountability_report():
+    """Lab 3: the four accountability reports, in order."""
+    return accountability.report()
+
+
 __all__ = ["Config", "Controls", "AUTONOMY", "LEVELS", "run", "launch",
            "check", "scenarios", "tools", "data", "console", "trace",
-           "prompts", "agt", "selftest"]
+           "prompts", "agt", "selftest", "accountability",
+           "accountability_report"]
