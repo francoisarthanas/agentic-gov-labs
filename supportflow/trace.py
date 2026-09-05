@@ -11,7 +11,25 @@ Lab 5 say this is the configuration we tested.
 import csv
 import io
 import json
+import re
 from datetime import datetime, timezone
+
+# Fields that carry customer identifiers into the trace. When the
+# log_full_context control is OFF these are redacted at write time, so the
+# trace holds less evidence and less personal data. That trade is the point.
+PII_KEYS = ("to", "recipient", "email", "phone", "shipping_address", "full_name")
+_EMAIL = re.compile(r"[\w.+-]+@[\w-]+\.[\w.-]+")
+REDACTED = "[redacted: log_full_context off]"
+
+
+def _redact_args(args):
+    return {k: (REDACTED if k in PII_KEYS else v) for k, v in (args or {}).items()}
+
+
+def _redact_text(text):
+    if text is None:
+        return None
+    return _EMAIL.sub("[redacted]", str(text))
 
 FIELDS = [
     "run_id", "ts", "step", "agent", "phase", "reasoning", "tool", "tool_args",
@@ -34,6 +52,9 @@ class Trace:
             control_checks=None, approval_required=False, approval_outcome=None,
             weakness=None):
         self._step += 1
+        if not getattr(self.config.controls, "log_full_context", True):
+            tool_args = _redact_args(tool_args)
+            tool_result_summary = _redact_text(tool_result_summary)
         self.rows.append({
             "run_id": self.run_id,
             "ts": datetime.now(timezone.utc).isoformat(),

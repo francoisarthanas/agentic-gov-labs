@@ -28,7 +28,7 @@ CONTROL_LABELS = {
     "memory_write_review": "Review memory writes",
     "email_recipient_allowlist": "Email recipient allowlist",
     "scoped_customer_lookup": "Scoped customer lookup",
-    "log_full_context": "Log full context",
+    "log_full_context": "Log customer data in trace",
 }
 
 CONTROL_HELP = {
@@ -39,7 +39,7 @@ CONTROL_HELP = {
     "memory_write_review": "Review a note before it is written to persistent memory",
     "email_recipient_allowlist": "Restrict outbound email to the address on the account",
     "scoped_customer_lookup": "Restrict lookups to the customer in this conversation",
-    "log_full_context": "Write the assembled context to the trace",
+    "log_full_context": "Keep customer identifiers in the trace. Off redacts them: less personal data, less evidence",
 }
 
 

@@ -22,7 +22,7 @@ CONTROL_LABELS = {
     "memory_write_review": "Review notes before writing to memory",
     "email_recipient_allowlist": "Restrict email recipients to the account",
     "scoped_customer_lookup": "Scope customer lookup to this conversation",
-    "log_full_context": "Log the full assembled context",
+    "log_full_context": "Log customer identifiers in the trace",
 }
 
 
