@@ -8,14 +8,18 @@ Lab notebooks and the **SupportFlow v2** sandbox agent for the [Agentic AI Gover
 
 | Lab | What you do | Open |
 |---|---|---|
-| **Lab 0: Setup & Test Agent Governance Tools** | Install, connect and test every tool, and meet the agent you'll govern all course | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/00_supportflow_v2.ipynb) |
-| **Lab 1: Build the Enterprise AI Inventory, Intake & Agent Registry** | Find every AI system and register the agent as a reviewable record | *Published when it runs* |
-| **Lab 2: Agent Risk Assessment and Authority Boundary** | Diagram how it works, then decide what it's allowed to do | *Published when it runs* |
-| **Lab 3: Accountability and Human Oversight** | Measure whether the controls that are written down are the ones actually holding | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/03_accountability.ipynb) |
-| **Lab 4: Agent Threat Model, Control, Testing and Remediation** | Predict how it can be attacked, then actually attack it | *Published when it runs* |
-| **Lab 5: Production Governance and User Readiness** | Roll it out, watch it, and know how to stop it | *Published when it runs* |
-| **Lab 6: Framework Crosswalk** | Map your controls to MGF, NIST, ISO 42001 and the EU AI Act | *Published when it runs* |
-| **Lab 7: Capstone Project** | Defend a go or no-go decision in front of a review board | *Published when it runs* |
+| **Lab 0: Set Up VerifyWise & Meet SupportFlow** | Create your workspace, open the Console, run two scenarios, pass the self-test | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/00_setup.ipynb) |
+| **Lab 1: Build the Enterprise AI Inventory & Agent Registry** | Twelve systems, one blank row, the two-question test, and your first three records | *Published when it runs* |
+| **Lab 2: Map the Agent Architecture & Trust Boundaries** | Components, data flows and boundaries, checked against the runtime | *Published when it runs* |
+| **Lab 3: Assess the Use Case & Build the Risk Register** | Should it be agentic at all, and a tier for every action class | *Published when it runs* |
+| **Lab 4: Enforce Agent Permissions & Data Protection** | Least privilege as a policy the runtime obeys | *Published when it runs* |
+| **Lab 5: Assign Accountability & Assess Vendor Risk** | The RACI, the decision rights, and the vendor file | *Published when it runs* |
+| **Lab 6: Design & Validate Human Oversight** | Checkpoints, the approval packet, and the fail-safe, tested in the Console | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/06_oversight.ipynb) |
+| **Lab 7: Threat-Model the Agent & Design Security Controls** | ATLAS, the OWASP Agentic Top 10, and a control at every layer | *Published when it runs* |
+| **Lab 8: Red-Team the Agent & Verify Remediation** | Attack the controls, grade the prompts, close the findings, re-test | *Published when it runs* |
+| **Lab 9: Investigate & Respond to an Agent Incident** | The first incident, the change record, the kill switch, the fallback drill | *Published when it runs* |
+| **Lab 10: Build the Framework Crosswalk & Evidence Index** | MGF to the EU AI Act, ISO 42001, NIST AI RMF, AIUC-1 and OWASP, and the gaps in your evidence | *Published when it runs* |
+| **Capstone** | Assess release readiness and defend your decision in front of the panel | *Published when it runs* |
 
 **You do not need to know Python.** Click the badge, then **Runtime > Run all**.
 
@@ -84,7 +88,7 @@ Everything students touch is a dropdown, a slider, a checkbox or a button.
 | Scenario | Which customer situation to run |
 | Autonomy | L1 to L5 |
 | Ceiling | The hard refund cap enforced in tool code |
-| Attack | Arms an attack scenario, for Lab 4 |
+| Attack | Arms an attack scenario, for Lab 8 |
 | Eight control toggles | Each safeguard, independently |
 | Run scenario | Produces the full plan-and-act trace |
 | Export Evidence | Timestamped bundle for VerifyWise |
@@ -103,19 +107,20 @@ supportflow/
   trace.py        JSONL trace, CSV export, evidence bundles
   scenarios.py    six named scenarios and the attack library
   selftest.py     eight setup checks, the Lab 0 submission artifact
-  accountability.py  Lab 3: six reports, escalation through the approval packet
+  accountability.py  Lab 6: six reports, escalation through the approval packet
   console.py      the Governance Console, widget fallback
   gradio_console.py  the Governance Console
   prompts.py      the five agent instruction sets, as deployed
   agt.py          bridge to the Microsoft Agent Governance Toolkit
 
 notebooks/
-  00_supportflow_v2.ipynb      Lab 0: the Console
-  01_governance_toolkit.ipynb  Labs 2 and 4: prompt scanning and policy
-  03_accountability.ipynb      Lab 3: the accountability evidence reports
+  00_setup.ipynb               Lab 0: the Console and the self-test
+  06_oversight.ipynb           Lab 6: the accountability and oversight reports
+  01_governance_toolkit.ipynb  the AGT prompt scanner and policy starter, used by Labs 4 and 8
+  03_accountability.ipynb      redirect to 06_oversight.ipynb, kept for old links
 ```
 
-**Worth reading even if you never run anything:** `data.py` for the refund SOP, and `tools.py` for the registry. The SOP is what the agent is told to do; the registry is what it can actually do. Comparing the two is most of Lab 2.
+**Worth reading even if you never run anything:** `data.py` for the refund SOP, and `tools.py` for the registry. The SOP is what the agent is told to do; the registry is what it can actually do. Comparing the two is most of Lab 4.
 
 ---
 
