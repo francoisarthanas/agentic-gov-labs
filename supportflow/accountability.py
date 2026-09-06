@@ -1,14 +1,12 @@
-"""Lab 3: accountability evidence.
+"""Lab 6: sandbox accountability and oversight reports.
 
-Three reports, all computed by running the system rather than asserted:
+Six teaching reports inspect escalation, configuration and packet behaviour:
+triggers(), sweep(), wall_or_sign(), raci(), dana(), and packet().
 
-  triggers()   Does the code enforce what the SOP says about escalation?
-  sweep()      How much actually reaches a human, and what one toggle does.
-  raci()       For each governance activity, what evidence exists that
-               anybody did it?
-
-Nothing here hardcodes a verdict. Every row is produced by probing the
-running system, which is the same standard the lab asks students to apply.
+The RACI allocation is a fixed illustrative baseline. Some findings are derived
+from local runs and configuration; other probes encode known case limitations.
+These reports do not query VerifyWise, real approval records or vendor contracts.
+Missing evidence here does not establish its absence elsewhere.
 """
 
 import dataclasses
@@ -274,7 +272,7 @@ RACI = [
 
 
 def raci(verbose=True):
-    """For each RACI activity, what evidence does the system hold?"""
+    """Compare a fixed teaching RACI with local sandbox evidence and limits."""
     ctx = _base(scenario="S2")          # one escalating run to probe against
     rows = []
     for activity, accountable, probe in RACI:
@@ -283,7 +281,7 @@ def raci(verbose=True):
 
     if verbose:
         _hdr("ACCOUNTABILITY EVIDENCE REPORT",
-             "RACI from the AI Accountability and Roles Policy, section 5")
+             "Fixed teaching RACI; local sandbox evidence only")
         print(f"  {'Activity':34}{'Accountable':14}{'Evidence':10}")
         print("  " + _RULE[:W - 2])
         for activity, acc, verdict, detail in rows:
@@ -300,8 +298,8 @@ def raci(verbose=True):
         print("=" * W)
         print("  " + "   ".join(f"{k}: {v}" for k, v in sorted(counts.items())))
         print()
-        print("  Every row above was produced by probing the running system.")
-        print("  None of it was asserted.")
+        print("  Roles are illustrative; findings include local probes and case limits.")
+        print("  This report does not inspect VerifyWise or external approval records.")
         print("=" * W)
     return rows
 
@@ -447,3 +445,4 @@ def report():
     dana()
     print()
     packet()
+

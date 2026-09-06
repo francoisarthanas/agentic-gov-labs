@@ -13,7 +13,7 @@ Lab notebooks and the **SupportFlow v2** sandbox agent for the [Agentic AI Gover
 | **Lab 2: Map the Agent Architecture & Trust Boundaries** | Components, data flows and boundaries, checked against the runtime | *Published when it runs* |
 | **Lab 3: Assess the Use Case & Build the Risk Register** | Should it be agentic at all, and a tier for every action class | *Published when it runs* |
 | **Lab 4: Enforce Agent Permissions & Data Protection** | Least privilege as a policy the runtime obeys | *Published when it runs* |
-| **Lab 5: Assign Accountability & Assess Vendor Risk** | The RACI, the decision rights, and the vendor file | *Published when it runs* |
+| **Lab 5: Assign Accountability & Assess Vendor Risk** | The RACI, the decision rights, and the vendor file | [Student guide and working pack](labs/05_accountability/README.md) |
 | **Lab 6: Design & Validate Human Oversight** | Checkpoints, the approval packet, and the fail-safe, tested in the Console | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/06_oversight.ipynb) |
 | **Lab 7: Threat-Model the Agent & Design Security Controls** | ATLAS, the OWASP Agentic Top 10, and a control at every layer | *Published when it runs* |
 | **Lab 8: Red-Team the Agent & Verify Remediation** | Attack the controls, grade the prompts, close the findings, re-test | *Published when it runs* |
@@ -49,7 +49,7 @@ Customer ──▶ Supervisor ──▶ Intake ──▶ Policy & Eligibility �
 |---|---|
 | L1 | Drafts everything. A human executes every action |
 | L2 | Executes reads. Asks before any write |
-| **L3** | **Auto-refunds under $200.** Escalates above |
+| **L3** | **Auto-refunds up to $200.** Escalates above |
 | **L4** | **Auto-refunds up to $500.** Flags anomalies only |
 | L5 | Full autonomy. After-the-fact audit only |
 
@@ -63,11 +63,11 @@ Customer ──▶ Supervisor ──▶ Intake ──▶ Policy & Eligibility �
 
 ### Try this first
 
-Run scenario **S2** at **L3**, then run it again at **L4**. Change nothing else.
+Run scenario **S2** at **L3 with Ceiling $200**, then at **L4 with Ceiling $500**, keeping the other controls unchanged. Set both controls explicitly.
 
-At L3 the agent escalates for approval. At L4 it moves $310 on its own.
+At L3/$200 the agent escalates for approval. At L4/$500 it refunds $310 in the sandbox. L4 with Ceiling still at $200 continues to escalate.
 
-That single dropdown is the whole course.
+The change in authority and ceiling is a governance decision as well as a configuration change.
 
 ---
 
@@ -151,3 +151,4 @@ The course is anchored to the **Model AI Governance Framework for Agentic AI**, 
 ## License
 
 Course materials © 2026 CyberProsAI. Provided to enrolled students for educational use.
+
