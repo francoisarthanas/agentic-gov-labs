@@ -8,7 +8,7 @@ Lab notebooks and the **SupportFlow v2** sandbox agent for the [Agentic AI Gover
 
 | Lab | What you do | Open |
 |---|---|---|
-| **Lab 0: Set Up VerifyWise & Meet SupportFlow** | Create your workspace, open the Console, run two scenarios, pass the self-test | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/00_setup.ipynb) |
+| **Lab 0: Set Up VerifyWise & Meet SupportFlow** | Install, pass the setup check, open the Console, run two scenarios, open VerifyWise | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/00_setup.ipynb) |
 | **Lab 1: Build the Enterprise AI Inventory & Agent Registry** | Twelve systems, one blank row, the two-question test, and your first three records | *Published when it runs* |
 | **Lab 2: Map the Agent Architecture & Trust Boundaries** | Components, data flows and boundaries, checked against the runtime | *Published when it runs* |
 | **Lab 3: Assess the Use Case & Build the Risk Register** | Should it be agentic at all, and a tier for every action class | *Published when it runs* |
@@ -114,7 +114,7 @@ supportflow/
   agt.py          bridge to the Microsoft Agent Governance Toolkit
 
 notebooks/
-  00_setup.ipynb               Lab 0: the Console and the self-test
+  00_setup.ipynb               Lab 0: install, setup check, Console
   06_oversight.ipynb           Lab 6: the accountability and oversight reports
   01_governance_toolkit.ipynb  the AGT prompt scanner and policy starter, used by Labs 4 and 8
   03_accountability.ipynb      redirect to 06_oversight.ipynb, kept for old links
