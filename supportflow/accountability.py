@@ -15,7 +15,7 @@ import dataclasses
 
 from .config import Config, Controls
 from .engine import run
-from . import scenarios
+from . import scenarios, tools
 
 W = 78
 _RULE = "-" * W
@@ -258,6 +258,38 @@ def _probe_incident(ctx):
     return "NONE", "No incident path exists in the runtime."
 
 
+def _probe_vendor_assessment(ctx):
+    """Does the runtime hold anything about the companies it calls?"""
+    ext = [t for t in tools.REGISTRY
+           if t["tool_class"] in ("Third-party", "External")]
+    named = [t for t in ext if "vendor" in (t.get("notes") or "").lower()]
+    return "NONE", (f"{len(ext)} tools call outside NorthWind. The runtime "
+                    f"holds no assessment, contract or retention term for "
+                    f"any of them.")
+
+
+def _probe_shadow_ai(_):
+    """Could the system tell you about a tool nobody registered?"""
+    return "NONE", ("The registry lists what was declared. Nothing compares "
+                    "it against what actually ran.")
+
+
+def _probe_inventory(_):
+    """A tool registry exists. Does it name an owner per tool?"""
+    fields = set()
+    for t in tools.REGISTRY:
+        fields |= set(t.keys())
+    if "owner" in fields:
+        return "EVIDENCE", "The tool registry records an owner per tool."
+    return "PARTIAL", (f"{len(tools.REGISTRY)} tools are registered with a "
+                       "class and an owning agent, but no human owner.")
+
+
+def _probe_training(_):
+    return "NONE", ("Nothing in the runtime records who was trained to "
+                    "review this agent's decisions.")
+
+
 # Activity list and Accountable role are read from the VerifyWise shipped
 # template "AI Accountability and Roles Policy", section 5.
 RACI = [
@@ -270,6 +302,10 @@ RACI = [
     ("Production monitoring", "Model Owner", _probe_monitoring),
     ("Incident response", "Model Owner", _probe_incident),
     ("Regulatory compliance review", "Legal", _probe_regulatory),
+    ("Vendor risk assessment", "Security", _probe_vendor_assessment),
+    ("Shadow AI detection and reporting", "AI Gov Lead", _probe_shadow_ai),
+    ("AI inventory maintenance", "AI Gov Lead", _probe_inventory),
+    ("AI training and awareness", "AI Gov Lead", _probe_training),
 ]
 
 
@@ -284,10 +320,10 @@ def raci(verbose=True):
     if verbose:
         _hdr("ACCOUNTABILITY EVIDENCE REPORT",
              "RACI from the AI Accountability and Roles Policy, section 5")
-        print(f"  {'Activity':34}{'Accountable':14}{'Evidence':10}")
+        print(f"  {'Activity':35}{'Accountable':14}{'Evidence':10}")
         print("  " + _RULE[:W - 2])
         for activity, acc, verdict, detail in rows:
-            print(f"  {activity:34}{acc:14}{verdict:10}")
+            print(f"  {activity:35}{acc:14}{verdict:10}")
         print("=" * W)
         print("  DETAIL")
         print("  " + _RULE[:W - 2])
@@ -304,6 +340,83 @@ def raci(verbose=True):
         print("  None of it was asserted.")
         print("=" * W)
     return rows
+
+
+# --------------------------------------------------------------- 4. vendors
+
+# The registry says what class a tool is. The case packet says which company
+# is on the other end. They are different questions, and the gap between the
+# two answers is the reason a vendor register exists.
+EXTERNAL_TOOLS = {
+    "get_sentiment_score": ("ToneLens",
+                            "the customer's message, in full"),
+    "search_help_center": ("managed vector store, unnamed in the packet",
+                           "the search query"),
+    "send_customer_email": ("email delivery, not identified in the packet",
+                            "recipient address, subject and body"),
+    "escalate_to_human": ("ticketing SaaS, unnamed in the packet",
+                          "case summary and priority"),
+}
+
+
+def vendors(verbose=True):
+    """Every call that leaves NorthWind, and who is on the other end.
+
+    Tool classes come from the registry. Call counts come from running all
+    six scenarios. Company names come from the case packet. Nothing here is
+    asserted.
+
+    Returns (rows, per_scenario).
+    """
+    by_name = {t["name"]: t for t in tools.REGISTRY}
+
+    calls = {name: 0 for name in EXTERNAL_TOOLS}
+    per_scenario = []
+    for sid in scenarios.SCENARIOS:
+        ctx = _base(scenario=sid)
+        used = [r["tool"] for r in ctx.trace.rows if r.get("tool")]
+        per_scenario.append((sid, len(used),
+                             sum(1 for t in used if t in EXTERNAL_TOOLS)))
+        for t in used:
+            if t in calls:
+                calls[t] += 1
+
+    rows = []
+    for name, (vendor, leaves) in EXTERNAL_TOOLS.items():
+        rows.append((name, by_name.get(name, {}).get("tool_class", "?"),
+                     vendor, leaves, calls[name]))
+
+    if verbose:
+        _hdr("EXTERNAL DEPENDENCY REPORT",
+             "Every call that leaves NorthWind, and who is on the other end")
+        for name, cls, vendor, leaves, n in rows:
+            print(f"  {name:24}{cls:14}called in {n} of "
+                  f"{len(per_scenario)} scenarios")
+            print(f"      receives:  {vendor}")
+            print(f"      sends:     {leaves}")
+        print("=" * W)
+        print(f"  {'Scenario':12}{'Tool calls':14}{'Left NorthWind':16}")
+        print("  " + _RULE[:W - 2])
+        for sid, total, out in per_scenario:
+            print(f"  {sid:12}{total:<14}{out:<16}")
+        print("=" * W)
+
+        classed = sum(1 for _, cls, _, _, _ in rows
+                      if cls in ("Third-party", "External"))
+        named = sum(1 for _, _, v, _, _ in rows if "unnamed" not in v
+                    and "not identified" not in v)
+        print(f"  Tools that reach outside NorthWind:        {len(rows)} "
+              f"of {len(tools.REGISTRY)}")
+        print(f"  Classified as external by the registry:    {classed} "
+              f"of {len(rows)}")
+        print(f"  Named as a company anywhere in the packet: {named} "
+              f"of {len(rows)}")
+        print()
+        print("  escalate_to_human is classified Control, not External. The")
+        print("  architecture notes call it a vendor SaaS. A reviewer reading")
+        print("  the registry alone would not know a third party is involved.")
+        print("=" * W)
+    return rows, per_scenario
 
 
 # ------------------------------------------------------------------ 5. dana
@@ -435,7 +548,7 @@ def packet(verbose=True):
 
 
 def report():
-    """All six, in order. This is the Lab 3 submission artifact."""
+    """Every report, in order."""
     triggers()
     print()
     sweep()
@@ -443,6 +556,8 @@ def report():
     wall_or_sign()
     print()
     raci()
+    print()
+    vendors()
     print()
     dana()
     print()

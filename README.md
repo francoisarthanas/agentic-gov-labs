@@ -13,7 +13,7 @@ Lab notebooks and the **SupportFlow v2** sandbox agent for the [Agentic AI Gover
 | **Lab 2: Map the Agent Architecture & Trust Boundaries** | Components, data flows and boundaries, checked against the runtime | *Published when it runs* |
 | **Lab 3: Assess the Use Case & Build the Risk Register** | Should it be agentic at all, and a tier for every action class | *Published when it runs* |
 | **Lab 4: Enforce Agent Permissions & Data Protection** | Least privilege as a policy the runtime obeys | *Published when it runs* |
-| **Lab 5: Assign Accountability & Assess Vendor Risk** | The RACI, the decision rights, and the vendor file | *Published when it runs* |
+| **Lab 5: Assign Accountability & Assess Vendor Risk** | Ground the RACI, rebuild it around eight decisions, and open the vendor file | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/05_accountability.ipynb) |
 | **Lab 6: Design & Validate Human Oversight** | Checkpoints, the approval packet, and the fail-safe, tested in the Console | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/06_oversight.ipynb) |
 | **Lab 7: Threat-Model the Agent & Design Security Controls** | ATLAS, the OWASP Agentic Top 10, and a control at every layer | *Published when it runs* |
 | **Lab 8: Red-Team the Agent & Verify Remediation** | Attack the controls, grade the prompts, close the findings, re-test | *Published when it runs* |
@@ -107,7 +107,7 @@ supportflow/
   trace.py        JSONL trace, CSV export, evidence bundles
   scenarios.py    six named scenarios and the attack library
   selftest.py     eight setup checks, the Lab 0 submission artifact
-  accountability.py  Lab 6: six reports, escalation through the approval packet
+  accountability.py  seven reports for Labs 5 and 6, from the RACI to the approval packet
   console.py      the Governance Console, widget fallback
   gradio_console.py  the Governance Console
   prompts.py      the five agent instruction sets, as deployed
@@ -115,7 +115,8 @@ supportflow/
 
 notebooks/
   00_setup.ipynb               Lab 0: install, setup check, Console
-  06_oversight.ipynb           Lab 6: the accountability and oversight reports
+  05_accountability.ipynb      Lab 5: accountability evidence and external dependencies
+  06_oversight.ipynb           Lab 6: the oversight reports and the approval packet
   01_governance_toolkit.ipynb  the AGT prompt scanner and policy starter, used by Labs 4 and 8
   03_accountability.ipynb      redirect to 06_oversight.ipynb, kept for old links
 ```
