@@ -239,16 +239,20 @@ def export(folder="evidence"):
     if _State.last is None:
         return "Run a scenario first."
     os.makedirs(folder, exist_ok=True)
+    bundle = dict(_State.last.trace.evidence_bundle())
+    stem = bundle.pop("filename_stem", "supportflow_run")
     written = []
-    for name, body in _State.last.trace.evidence_bundle().items():
-        path = os.path.join(folder, name)
+    for name, body in bundle.items():
+        path = os.path.join(folder, f"{stem}_{name}")
         with open(path, "w", encoding="utf-8") as fh:
             fh.write(body)
         written.append(f"  {path}  ({len(body):,} bytes)")
     return ("EVIDENCE BUNDLE WRITTEN\n" + "-" * 62 + "\n"
             + "\n".join(written)
-            + f"\n\nconfig_hash {_State.cfg.config_hash}"
-            + "\nAttach these to your VerifyWise record.")
+            + f"\n\nconfig_hash  {_State.cfg.config_hash}"
+            + "\n\nThis hash identifies the exact configuration that produced"
+            + "\nthese files. Anyone who sets the Console to the same hash gets"
+            + "\nthe same result. Record it with your finding.")
 
 
 def build(share=False, sandbox=False):
