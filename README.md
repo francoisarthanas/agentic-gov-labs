@@ -15,7 +15,7 @@ Lab notebooks and the **SupportFlow v2** sandbox agent for the [Agentic AI Gover
 | **Lab 4: Enforce Agent Permissions & Data Protection** | Least privilege as a policy the runtime obeys | *Published when it runs* |
 | **Lab 5: Assign Accountability & Assess Vendor Risk** | Ground the RACI, rebuild it around eight decisions, and open the vendor file | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/05_accountability.ipynb) |
 | **Lab 6: Design & Validate Human Oversight** | Test whether the escalation rules fire, then design the checkpoints, the approval packet and the fail-safe | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/06_oversight.ipynb) |
-| **Lab 7: Threat-Model the Agent & Design Security Controls** | ATLAS, the OWASP Agentic Top 10, and a control at every layer | *Published when it runs* |
+| **Lab 7: Threat-Model the Agent & Design Security Controls** | Map every attack to the control built for it, then build the ATLAS coverage layer and the control map | [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/francoisarthanas/agentic-gov-labs/blob/main/notebooks/07_threat.ipynb) |
 | **Lab 8: Red-Team the Agent & Verify Remediation** | Attack the controls, grade the prompts, close the findings, re-test | *Published when it runs* |
 | **Lab 9: Investigate & Respond to an Agent Incident** | The first incident, the change record, the kill switch, the fallback drill | *Published when it runs* |
 | **Lab 10: Build the Framework Crosswalk & Evidence Index** | MGF to the EU AI Act, ISO 42001, NIST AI RMF, AIUC-1 and OWASP, and the gaps in your evidence | *Published when it runs* |
@@ -108,6 +108,7 @@ supportflow/
   scenarios.py    six named scenarios and the attack library
   selftest.py     eight setup checks, the Lab 0 submission artifact
   accountability.py  seven reports for Labs 5 and 6, from the RACI to the approval packet
+  threatmodel.py  three reports for Lab 7: attack surface, layer coverage, tool exposure
   console.py      the Governance Console, widget fallback
   gradio_console.py  the Governance Console
   prompts.py      the five agent instruction sets, as deployed
@@ -117,8 +118,13 @@ notebooks/
   00_setup.ipynb               Lab 0: install, setup check, Console
   05_accountability.ipynb      Lab 5: accountability evidence and external dependencies
   06_oversight.ipynb           Lab 6: the four oversight reports, ending in the approval packet
+  07_threat.ipynb              Lab 7: attack surface, control coverage by layer, tool exposure
   01_governance_toolkit.ipynb  the AGT prompt scanner and policy starter, used by Labs 4 and 8
   03_accountability.ipynb      redirect to 06_oversight.ipynb, kept for old links
+
+atlas/
+  supportflow_starter_layer.json   ATLAS Navigator starter layer for Lab 7,
+                                   fourteen candidate techniques, all scored 0
 ```
 
 **Worth reading even if you never run anything:** `data.py` for the refund SOP, and `tools.py` for the registry. The SOP is what the agent is told to do; the registry is what it can actually do. Comparing the two is most of Lab 4.

@@ -61,7 +61,7 @@ LEVELS = ["L1", "L2", "L3", "L4", "L5"]
 
 @dataclass
 class Controls:
-    """The nine independently toggleable controls.
+    """The eight independently toggleable controls.
 
     Defaults are the state a rushed pilot actually ships in: somebody thought
     about money, nobody thought about attackers.

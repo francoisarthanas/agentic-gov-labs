@@ -1,0 +1,206 @@
+{
+  "versions": {
+    "layer": "4.5",
+    "navigator": "5.3.2"
+  },
+  "domain": "atlas-atlas",
+  "metadata": [
+    {
+      "name": "atlas_data_version",
+      "value": "2026.08"
+    },
+    {
+      "name": "system",
+      "value": "SupportFlow, NorthWind Home Goods"
+    },
+    {
+      "name": "starter",
+      "value": "Scores are all 0. Set your own and add a comment to each."
+    }
+  ],
+  "name": "SupportFlow coverage, STARTER",
+  "description": "Starter layer for the SupportFlow threat model. Fourteen candidate techniques are pre-selected so you do not spend the lab hunting through the matrix. Every score is 0. Score each one 1 to 3 for how exposed SupportFlow is, or leave it 0 and say in the comment why it does not apply. Not all fourteen apply.",
+  "techniques": [
+    {
+      "techniqueID": "AML.T0051",
+      "tactic": "execution",
+      "score": 0,
+      "color": "",
+      "comment": "",
+      "enabled": true,
+      "metadata": [],
+      "links": [],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "AML.T0051.000",
+      "tactic": "execution",
+      "score": 0,
+      "color": "",
+      "comment": "",
+      "enabled": true,
+      "metadata": [],
+      "links": []
+    },
+    {
+      "techniqueID": "AML.T0051.001",
+      "tactic": "execution",
+      "score": 0,
+      "color": "",
+      "comment": "",
+      "enabled": true,
+      "metadata": [],
+      "links": []
+    },
+    {
+      "techniqueID": "AML.T0070",
+      "tactic": "persistence",
+      "score": 0,
+      "color": "",
+      "comment": "",
+      "enabled": true,
+      "metadata": [],
+      "links": []
+    },
+    {
+      "techniqueID": "AML.T0071",
+      "tactic": "defense-evasion",
+      "score": 0,
+      "color": "",
+      "comment": "",
+      "enabled": true,
+      "metadata": [],
+      "links": []
+    },
+    {
+      "techniqueID": "AML.T0080",
+      "tactic": "persistence",
+      "score": 0,
+      "color": "",
+      "comment": "",
+      "enabled": true,
+      "metadata": [],
+      "links": [],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "AML.T0080.000",
+      "tactic": "persistence",
+      "score": 0,
+      "color": "",
+      "comment": "",
+      "enabled": true,
+      "metadata": [],
+      "links": []
+    },
+    {
+      "techniqueID": "AML.T0053",
+      "tactic": "execution",
+      "score": 0,
+      "color": "",
+      "comment": "",
+      "enabled": true,
+      "metadata": [],
+      "links": []
+    },
+    {
+      "techniqueID": "AML.T0086",
+      "tactic": "exfiltration",
+      "score": 0,
+      "color": "",
+      "comment": "",
+      "enabled": true,
+      "metadata": [],
+      "links": []
+    },
+    {
+      "techniqueID": "AML.T0085",
+      "tactic": "collection",
+      "score": 0,
+      "color": "",
+      "comment": "",
+      "enabled": true,
+      "metadata": [],
+      "links": [],
+      "showSubtechniques": true
+    },
+    {
+      "techniqueID": "AML.T0085.001",
+      "tactic": "collection",
+      "score": 0,
+      "color": "",
+      "comment": "",
+      "enabled": true,
+      "metadata": [],
+      "links": []
+    },
+    {
+      "techniqueID": "AML.T0084",
+      "tactic": "discovery",
+      "score": 0,
+      "color": "",
+      "comment": "",
+      "enabled": true,
+      "metadata": [],
+      "links": []
+    },
+    {
+      "techniqueID": "AML.T0090",
+      "tactic": "credential-access",
+      "score": 0,
+      "color": "",
+      "comment": "",
+      "enabled": true,
+      "metadata": [],
+      "links": []
+    },
+    {
+      "techniqueID": "AML.T0024.002",
+      "tactic": "exfiltration",
+      "score": 0,
+      "color": "",
+      "comment": "",
+      "enabled": true,
+      "metadata": [],
+      "links": []
+    }
+  ],
+  "gradient": {
+    "colors": [
+      "#FFFFFF",
+      "#FFE766",
+      "#FF9F1C",
+      "#D7263D"
+    ],
+    "minValue": 0,
+    "maxValue": 3
+  },
+  "legendItems": [
+    {
+      "label": "0  not applicable, say why in the comment",
+      "color": "#FFFFFF"
+    },
+    {
+      "label": "1  possible, a control exists and is on",
+      "color": "#FFE766"
+    },
+    {
+      "label": "2  possible, a control exists and is off",
+      "color": "#FF9F1C"
+    },
+    {
+      "label": "3  possible, no control at all",
+      "color": "#D7263D"
+    }
+  ],
+  "showTacticRowBackground": true,
+  "tacticRowBackground": "#205B8F",
+  "selectTechniquesAcrossTactics": false,
+  "sorting": 0,
+  "layout": {
+    "layout": "side",
+    "showID": true,
+    "showName": true
+  },
+  "hideDisabled": false
+}

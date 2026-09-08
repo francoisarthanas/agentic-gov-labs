@@ -50,8 +50,8 @@ def _control_label(key):
 def _control_info(key):
     return f"{CONTROL_HELP.get(key, '')}  ·  {key}"
 
-_TRACE_HEADERS = ["#", "agent", "phase", "tool", "changed state?",
-                  "reversible", "reasoning"]
+_TRACE_HEADERS = ["#", "agent", "phase", "tool", "arguments", "result",
+                  "changed state?", "reversible", "reasoning"]
 
 
 class _State:
@@ -67,6 +67,16 @@ def _build_config(level, ceiling, attack, toggles):
                   controls=Controls(**dict(zip(CONTROL_KEYS, toggles))))
 
 
+def _short(v, limit=90):
+    """Render an argument dict or a result string for the trace table."""
+    if v in (None, "", {}):
+        return ""
+    if isinstance(v, dict):
+        v = ", ".join("%s=%s" % (k, val) for k, val in v.items())
+    v = str(v)
+    return v if len(v) <= limit else v[:limit - 1] + "\u2026"
+
+
 def _trace_rows(ctx):
     rows = []
     for r in ctx.trace.rows:
@@ -75,6 +85,8 @@ def _trace_rows(ctx):
             r["agent"],
             r["phase"],
             r.get("tool") or "",
+            _short(r.get("tool_args")),
+            _short(r.get("tool_result_summary"), 150),
             "YES" if r.get("state_change") else "",
             r.get("reversible") or "",
             r["reasoning"],
@@ -356,13 +368,14 @@ def build(share=False, sandbox=False):
                             value=defaults[k], label=_control_label(k),
                             info=_control_info(k)))
 
-            with gr.Accordion("Attack simulation · used in future labs",
-                              open=False):
+            with gr.Accordion("Attack simulation", open=False):
                 gr.Markdown(
-                    "Arms a prepared adversarial scenario. **Leave this on "
-                    "'No attack' for now.** It is here so you can see the "
-                    "whole control surface, and we come back to it in a "
-                    "later lab.")
+                    "Arms a prepared adversarial scenario. Every attack here "
+                    "has a control built for it in the panel above. **Leave "
+                    "this on 'No attack' unless a lab step tells you "
+                    "otherwise.** Run the attack, then run it again with its "
+                    "control on, and read the *arguments* and *result* "
+                    "columns rather than the Outcome box.")
                 atk = gr.Dropdown(atk_choices, value="none", label="Attack")
 
             with gr.Row():
