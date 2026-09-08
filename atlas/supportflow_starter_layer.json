@@ -11,36 +11,22 @@
     },
     {
       "name": "based_on",
-      "value": "AML.CS0039 Living Off AI: Prompt Injection via Jira Service Management"
+      "value": "AML.CS0037 Data Exfiltration via Agent Tools in Copilot Studio"
     },
     {
       "name": "system_under_review",
       "value": "SupportFlow, NorthWind Home Goods"
-    },
-    {
-      "name": "how_to_use",
-      "value": "Score the five white techniques 1 to 3. The three grey ones are already answered."
     }
   ],
-  "name": "SupportFlow vs AML.CS0039, STARTER",
-  "description": "The documented attack chain from AML.CS0039, pointed at SupportFlow. Three techniques are greyed out and already scored: they happen on the attacker's own equipment, before anything reaches NorthWind, and no control NorthWind owns can touch them. The remaining FIVE are inside NorthWind's boundary. Score each one 1 to 3 and write a comment saying what in SupportFlow makes it that number.",
+  "name": "SupportFlow vs AML.CS0037, STARTER",
+  "description": "The five steps of AML.CS0037 that happen inside the victim's system, pointed at SupportFlow. They match the five rows of your table. Colour each one: green if a control stops it, amber if a control exists but is off, red if there is no control. The two grey ones happen on the attacker's own machine and are already answered.",
   "techniques": [
     {
-      "techniqueID": "AML.T0003",
+      "techniqueID": "AML.T0006",
       "tactic": "reconnaissance",
       "score": 0,
       "color": "#BFC5CC",
-      "comment": "Outside NorthWind's boundary. This happens on the attacker's own equipment before anything arrives. You cannot control reconnaissance; your controls start at the door.",
-      "enabled": true,
-      "metadata": [],
-      "links": []
-    },
-    {
-      "techniqueID": "AML.T0095",
-      "tactic": "reconnaissance",
-      "score": 0,
-      "color": "#BFC5CC",
-      "comment": "Outside NorthWind's boundary. This happens on the attacker's own equipment before anything arrives. You cannot control reconnaissance; your controls start at the door.",
+      "comment": "Happens on the attacker's own machine, before anything reaches the company. Nothing here can stop it.",
       "enabled": true,
       "metadata": [],
       "links": []
@@ -50,7 +36,7 @@
       "tactic": "ai-attack-adaptation",
       "score": 0,
       "color": "#BFC5CC",
-      "comment": "Outside NorthWind's boundary. This happens on the attacker's own equipment before anything arrives. You cannot control reconnaissance; your controls start at the door.",
+      "comment": "Happens on the attacker's own machine, before anything reaches the company. Nothing here can stop it.",
       "enabled": true,
       "metadata": [],
       "links": []
@@ -60,27 +46,27 @@
       "tactic": "initial-access",
       "score": 0,
       "color": "",
-      "comment": "",
+      "comment": "Row 1: found the agent by emailing the inbox",
       "enabled": true,
       "metadata": [],
       "links": []
     },
     {
-      "techniqueID": "AML.T0051.001",
-      "tactic": "execution",
+      "techniqueID": "AML.T0084",
+      "tactic": "discovery",
       "score": 0,
       "color": "",
-      "comment": "",
+      "comment": "Row 2: got the agent to describe its own tools and data",
       "enabled": true,
       "metadata": [],
       "links": []
     },
     {
-      "techniqueID": "AML.T0053",
-      "tactic": "privilege-escalation",
+      "techniqueID": "AML.T0085.000",
+      "tactic": "collection",
       "score": 0,
       "color": "",
-      "comment": "",
+      "comment": "Row 3: pulled the knowledge base file",
       "enabled": true,
       "metadata": [],
       "links": []
@@ -90,7 +76,7 @@
       "tactic": "collection",
       "score": 0,
       "color": "",
-      "comment": "",
+      "comment": "Row 4: pulled the customer records",
       "enabled": true,
       "metadata": [],
       "links": []
@@ -100,7 +86,7 @@
       "tactic": "exfiltration",
       "score": 0,
       "color": "",
-      "comment": "",
+      "comment": "Row 5: emailed it all to an outside address",
       "enabled": true,
       "metadata": [],
       "links": []
@@ -109,28 +95,26 @@
   "gradient": {
     "colors": [
       "#FFFFFF",
-      "#FFE766",
-      "#FF9F1C",
       "#D7263D"
     ],
     "minValue": 0,
-    "maxValue": 3
+    "maxValue": 1
   },
   "legendItems": [
     {
-      "label": "grey  outside NorthWind's control, already answered",
+      "label": "grey  outside the company, nothing here can stop it",
       "color": "#BFC5CC"
     },
     {
-      "label": "1  a control exists and is on",
-      "color": "#FFE766"
+      "label": "green  a control stops this and it is on",
+      "color": "#2E9E5B"
     },
     {
-      "label": "2  a control exists but is off",
+      "label": "amber  a control exists but it is off",
       "color": "#FF9F1C"
     },
     {
-      "label": "3  no control at all",
+      "label": "red  no control at all",
       "color": "#D7263D"
     }
   ],
