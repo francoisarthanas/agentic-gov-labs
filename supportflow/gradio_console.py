@@ -11,7 +11,7 @@ Falls back to the ipywidgets console if Gradio is unavailable:
 """
 
 from . import config as _config
-from . import data, scenarios, tools
+from . import data, scenarios, tools, threatmodel
 from .config import AUTONOMY, LEVELS, Config, Controls
 from .engine import run as _run
 
@@ -211,6 +211,34 @@ def scenario_message(scenario):
     return scenarios.SCENARIOS[scenario]["message"]
 
 
+def attack_briefing(attack):
+    """What the armed attack does, and which control is supposed to answer it.
+
+    The Console used to hide the attack menu in a collapsed panel, which
+    made the single most important selector in the security labs invisible.
+    It is now next to the scenario, and selecting one explains itself.
+    """
+    a = scenarios.ATTACKS.get(attack)
+    if not a or a["id"] == "none":
+        return ("### No attack armed\n\n"
+                "The agent is handling an ordinary customer. Arm an attack "
+                "to see the same scenario under adversarial conditions.")
+    ctrl = threatmodel.ATTACK_CONTROL.get(a["id"])
+    meta = threatmodel.CONTROL_MAP.get(ctrl, {})
+    state = "**ON**" if getattr(Controls(), ctrl, False) else "**OFF by default**"
+    runs = ", ".join(a["runs_on"])
+    return (
+        f"### Attack armed · {a['id']}  {a['title']}\n\n"
+        f"{a['description']}\n\n"
+        f"**Designed for scenarios:** {runs}. Choosing another scenario is "
+        f"allowed and usually does nothing.\n\n"
+        f"**The control built to stop it:** `{ctrl}`, at the "
+        f"**{meta.get('layer', 'unknown')}** layer, {state}.\n\n"
+        f"Run it, then tick that control and run it again. **Read the "
+        f"arguments and result columns of the trace, not the Outcome box.**"
+    )
+
+
 def briefing(scenario):
     """The ticket, as a support agent would receive it.
 
@@ -324,8 +352,15 @@ def build(share=False, sandbox=False):
                 "**A scenario is one customer contacting support once.** "
                 "Pick one, set how much freedom the agent has, then press "
                 "**Run scenario** and read what it did.")
-            scn = gr.Dropdown(scen_choices, value="S1", label="Scenario")
+            with gr.Row():
+                scn = gr.Dropdown(scen_choices, value="S1",
+                                  label="Scenario", scale=1)
+                atk = gr.Dropdown(atk_choices, value="none",
+                                  label="Attack  ·  leave on 'No attack' "
+                                        "unless a lab step says otherwise",
+                                  scale=1)
             brief = gr.Markdown(briefing("S1"))
+            atk_brief = gr.Markdown(attack_briefing("none"))
 
             custom = custom_btn = detect = None
             if sandbox:
@@ -368,16 +403,6 @@ def build(share=False, sandbox=False):
                             value=defaults[k], label=_control_label(k),
                             info=_control_info(k)))
 
-            with gr.Accordion("Attack simulation", open=False):
-                gr.Markdown(
-                    "Arms a prepared adversarial scenario. Every attack here "
-                    "has a control built for it in the panel above. **Leave "
-                    "this on 'No attack' unless a lab step tells you "
-                    "otherwise.** Run the attack, then run it again with its "
-                    "control on, and read the *arguments* and *result* "
-                    "columns rather than the Outcome box.")
-                atk = gr.Dropdown(atk_choices, value="none", label="Attack")
-
             with gr.Row():
                 run_btn = gr.Button("Run scenario", variant="primary", scale=2)
                 again_btn = gr.Button("Run again (same day)", scale=2)
@@ -390,7 +415,7 @@ def build(share=False, sandbox=False):
                                  wrap=True, row_count=(1, "dynamic"))
 
         with gr.Tab("Tool registry"):
-            gr.Markdown("**Nine tools, plus the control tool.** Note the "
+            gr.Markdown("**Ten tools: nine the agent calls to do its job, plus the control tool it calls to escalate.** Note the "
                         "`ACCESS` and `REVERSIBLE` columns.")
             gr.Code(tools.registry_table(), language=None)
 
@@ -422,6 +447,7 @@ def build(share=False, sandbox=False):
         mem_btn.click(memory, [scn, atk], mem_out)
         exp_btn.click(lambda: export(), None, exp_out)
         scn.change(briefing, scn, brief)
+        atk.change(attack_briefing, atk, atk_brief)
         if sandbox:
             custom_btn.click(go_custom, [scn, lvl, ceil, atk, custom] + boxes,
                              outputs + [detect])
