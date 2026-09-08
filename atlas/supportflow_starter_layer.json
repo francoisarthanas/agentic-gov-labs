@@ -10,31 +10,54 @@
       "value": "2026.08"
     },
     {
-      "name": "system",
+      "name": "based_on",
+      "value": "AML.CS0039 Living Off AI: Prompt Injection via Jira Service Management"
+    },
+    {
+      "name": "system_under_review",
       "value": "SupportFlow, NorthWind Home Goods"
     },
     {
-      "name": "starter",
-      "value": "Scores are all 0. Set your own and add a comment to each."
+      "name": "how_to_use",
+      "value": "Score the five white techniques 1 to 3. The three grey ones are already answered."
     }
   ],
-  "name": "SupportFlow coverage, STARTER",
-  "description": "Starter layer for the SupportFlow threat model. Fourteen candidate techniques are pre-selected so you do not spend the lab hunting through the matrix. Every score is 0. Score each one 1 to 3 for how exposed SupportFlow is, or leave it 0 and say in the comment why it does not apply. Not all fourteen apply.",
+  "name": "SupportFlow vs AML.CS0039, STARTER",
+  "description": "The documented attack chain from AML.CS0039, pointed at SupportFlow. Three techniques are greyed out and already scored: they happen on the attacker's own equipment, before anything reaches NorthWind, and no control NorthWind owns can touch them. The remaining FIVE are inside NorthWind's boundary. Score each one 1 to 3 and write a comment saying what in SupportFlow makes it that number.",
   "techniques": [
     {
-      "techniqueID": "AML.T0051",
-      "tactic": "execution",
+      "techniqueID": "AML.T0003",
+      "tactic": "reconnaissance",
       "score": 0,
-      "color": "",
-      "comment": "",
+      "color": "#BFC5CC",
+      "comment": "Outside NorthWind's boundary. This happens on the attacker's own equipment before anything arrives. You cannot control reconnaissance; your controls start at the door.",
       "enabled": true,
       "metadata": [],
-      "links": [],
-      "showSubtechniques": true
+      "links": []
     },
     {
-      "techniqueID": "AML.T0051.000",
-      "tactic": "execution",
+      "techniqueID": "AML.T0095",
+      "tactic": "reconnaissance",
+      "score": 0,
+      "color": "#BFC5CC",
+      "comment": "Outside NorthWind's boundary. This happens on the attacker's own equipment before anything arrives. You cannot control reconnaissance; your controls start at the door.",
+      "enabled": true,
+      "metadata": [],
+      "links": []
+    },
+    {
+      "techniqueID": "AML.T0065",
+      "tactic": "ai-attack-adaptation",
+      "score": 0,
+      "color": "#BFC5CC",
+      "comment": "Outside NorthWind's boundary. This happens on the attacker's own equipment before anything arrives. You cannot control reconnaissance; your controls start at the door.",
+      "enabled": true,
+      "metadata": [],
+      "links": []
+    },
+    {
+      "techniqueID": "AML.T0093",
+      "tactic": "initial-access",
       "score": 0,
       "color": "",
       "comment": "",
@@ -53,76 +76,14 @@
       "links": []
     },
     {
-      "techniqueID": "AML.T0070",
-      "tactic": "persistence",
-      "score": 0,
-      "color": "",
-      "comment": "",
-      "enabled": true,
-      "metadata": [],
-      "links": []
-    },
-    {
-      "techniqueID": "AML.T0071",
-      "tactic": "defense-evasion",
-      "score": 0,
-      "color": "",
-      "comment": "",
-      "enabled": true,
-      "metadata": [],
-      "links": []
-    },
-    {
-      "techniqueID": "AML.T0080",
-      "tactic": "persistence",
-      "score": 0,
-      "color": "",
-      "comment": "",
-      "enabled": true,
-      "metadata": [],
-      "links": [],
-      "showSubtechniques": true
-    },
-    {
-      "techniqueID": "AML.T0080.000",
-      "tactic": "persistence",
-      "score": 0,
-      "color": "",
-      "comment": "",
-      "enabled": true,
-      "metadata": [],
-      "links": []
-    },
-    {
       "techniqueID": "AML.T0053",
-      "tactic": "execution",
+      "tactic": "privilege-escalation",
       "score": 0,
       "color": "",
       "comment": "",
       "enabled": true,
       "metadata": [],
       "links": []
-    },
-    {
-      "techniqueID": "AML.T0086",
-      "tactic": "exfiltration",
-      "score": 0,
-      "color": "",
-      "comment": "",
-      "enabled": true,
-      "metadata": [],
-      "links": []
-    },
-    {
-      "techniqueID": "AML.T0085",
-      "tactic": "collection",
-      "score": 0,
-      "color": "",
-      "comment": "",
-      "enabled": true,
-      "metadata": [],
-      "links": [],
-      "showSubtechniques": true
     },
     {
       "techniqueID": "AML.T0085.001",
@@ -135,27 +96,7 @@
       "links": []
     },
     {
-      "techniqueID": "AML.T0084",
-      "tactic": "discovery",
-      "score": 0,
-      "color": "",
-      "comment": "",
-      "enabled": true,
-      "metadata": [],
-      "links": []
-    },
-    {
-      "techniqueID": "AML.T0090",
-      "tactic": "credential-access",
-      "score": 0,
-      "color": "",
-      "comment": "",
-      "enabled": true,
-      "metadata": [],
-      "links": []
-    },
-    {
-      "techniqueID": "AML.T0024.002",
+      "techniqueID": "AML.T0086",
       "tactic": "exfiltration",
       "score": 0,
       "color": "",
@@ -177,25 +118,24 @@
   },
   "legendItems": [
     {
-      "label": "0  not applicable, say why in the comment",
-      "color": "#FFFFFF"
+      "label": "grey  outside NorthWind's control, already answered",
+      "color": "#BFC5CC"
     },
     {
-      "label": "1  possible, a control exists and is on",
+      "label": "1  a control exists and is on",
       "color": "#FFE766"
     },
     {
-      "label": "2  possible, a control exists and is off",
+      "label": "2  a control exists but is off",
       "color": "#FF9F1C"
     },
     {
-      "label": "3  possible, no control at all",
+      "label": "3  no control at all",
       "color": "#D7263D"
     }
   ],
   "showTacticRowBackground": true,
   "tacticRowBackground": "#205B8F",
-  "selectTechniquesAcrossTactics": false,
   "sorting": 0,
   "layout": {
     "layout": "side",
